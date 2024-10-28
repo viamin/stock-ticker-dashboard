@@ -50,6 +50,8 @@ group :development do
   gem "web-console"
 
   gem "annotate", "~> 3.2" # https://github.com/ctran/annotate_models
+
+  gem "kamal", "~> 2.2", require: false # https://github.com/basecamp/kamal
 end
 
 group :test do
@@ -65,5 +67,3 @@ gem "friendly_id", "~> 5.5" # https://github.com/norman/friendly_id
 gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue/
 
 gem "groupdate", "~> 6.5" # https://github.com/ankane/groupdate
-
-gem "kamal", "~> 2.2", require: false # https://github.com/basecamp/kamal

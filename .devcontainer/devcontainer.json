@@ -47,9 +47,5 @@
 
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly"
-  ],
-
-  "remoteEnv": {
-    "SSH_AUTH_SOCK": "/home/vscode/.1password/agent.sock"
-  }
+  ]
 }

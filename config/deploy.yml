@@ -35,10 +35,14 @@ registry:
 # Configure builder setup.
 builder:
   arch: arm64
+  args:
+    platform: linux/arm/v8
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 #
 env:
+  clear:
+    DOCKER_FLAGS: "--platform linux/arm64"
   secret:
     - RAILS_MASTER_KEY
 
@@ -53,6 +57,7 @@ env:
 ssh:
   user: bart
   keys: ["~/.ssh/id_ed25519-nyte"]
+  config: true
 
 # Use a persistent storage volume.
 #
