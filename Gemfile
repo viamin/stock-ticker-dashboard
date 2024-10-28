@@ -1,8 +1,11 @@
 source "https://rubygems.org"
 
+ruby "2.7.4"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.1", ">= 7.2.1.2"
-# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+gem "rails", "~> 7.1.4", ">= 7.1.4.2"
+# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+# gem "sprockets-rails"
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 1.4"
@@ -15,7 +18,7 @@ gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem "tailwindcss-rails"
+gem "tailwindcss-rails", "2.0.30"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -26,7 +29,7 @@ gem "tailwindcss-rails"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -36,10 +39,10 @@ group :development, :test do
   gem "brakeman", require: false
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "debug", platforms: %i[ mri ], require: "debug/prelude"
 
 
-  gem "faker", "~> 3.5" # https://github.com/faker-ruby/faker
+  gem "faker" # https://github.com/faker-ruby/faker
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -49,9 +52,9 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
-  gem "annotate", "~> 3.2" # https://github.com/ctran/annotate_models
+  gem "annotate" # https://github.com/ctran/annotate_models
 
-  gem "kamal", "~> 2.2", require: false # https://github.com/basecamp/kamal
+  # gem "kamal", "~> 2.2", require: false # https://github.com/basecamp/kamal
 end
 
 group :test do
@@ -60,12 +63,12 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "chartkick", "~> 5.1" # https://github.com/ankane/chartkick
+gem "chartkick" # https://github.com/ankane/chartkick
 
-gem "friendly_id", "~> 5.5" # https://github.com/norman/friendly_id
+gem "friendly_id" # https://github.com/norman/friendly_id
 
-gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue/
+gem "solid_queue" # https://github.com/rails/solid_queue/
 
-gem "groupdate", "~> 6.5" # https://github.com/ankane/groupdate
+gem "groupdate" # https://github.com/ankane/groupdate
 
-gem "faraday", "~> 2.12"
+gem "faraday"
