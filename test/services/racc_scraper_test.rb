@@ -22,24 +22,13 @@ class RaccScraperTest < ActiveSupport::TestCase
   end
 
   test "scrape makes request to configured endpoint" do
-    Faraday::Response.new(
-      status: 200,
-      body: {
-        stocks: [
-          { ticker: "AAPL", price: 150.00 }
-        ]
-      }.to_json
-    )
-
     mock_client = Object.new
     def mock_client.get(endpoint)
       Faraday::Response.new(
         status: 200,
-        body: {
-          stocks: [
-            { ticker: "AAPL", price: 150.00 }
-          ]
-        }.to_json
+        body: [
+            { symbol: "AAPL", companyname: "Apple Inc.", latestprice: 150.00 }
+          ].to_json
       )
     end
 
