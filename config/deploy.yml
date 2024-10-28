@@ -21,6 +21,7 @@ servers:
 #   host: app.example.com
   # kamal-proxy connects to your container over port 80, use `app_port` to specify a different port.
   # app_port: 3000
+proxy: false
 
 # Credentials for your image host.
 registry:
@@ -34,9 +35,9 @@ registry:
 
 # Configure builder setup.
 builder:
-  arch: arm64
-  args:
-    platform: linux/arm/v8
+  arch:
+    - arm64
+    - arm/v8
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 #
@@ -98,3 +99,13 @@ volumes:
 #     port: 6379
 #     directories:
 #       - data:/data
+accessories:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80   # Expose HTTP on port 80
+      # - 443:443 # Optional: Expose HTTPS on port 443
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf  # Bind your custom NGINX config
+      # Optional: Include SSL certs if using HTTPS
+      # - ./certs:/etc/nginx/certs
