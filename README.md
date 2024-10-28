@@ -9,10 +9,10 @@ It is used to scrape prices from the Racc Investment Management project website 
 The site is hosted on a raspberry pi 4 with a static IP address. To deploy:
 
 ```
-bundle exec cap production deploy
+bin/kamal deploy
 ```
 
 ## Credits
 
-Dashboard ticker font is adapted from https://www.fontspace.com/subway-ticker-font-f5621
+Dashboard ticker font is adapted from https://www.fontspace.com/subway-ticker-font-f5621 with some added glyphs ("⏷" & "⏶")
 Arduino ticker is based on https://wp.josh.com/2016/05/20/huge-scrolling-arduino-led-sign/

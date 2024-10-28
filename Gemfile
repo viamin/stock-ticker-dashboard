@@ -50,10 +50,6 @@ group :development do
   gem "web-console"
 
   gem "annotate", "~> 3.2" # https://github.com/ctran/annotate_models
-
-  gem "capistrano", "~> 3.19", require: false # https://github.com/capistrano/capistrano
-  gem "capistrano-rails", "~> 1.6", require: false # https://github.com/capistrano/rails
-  gem "capistrano-rbenv", "~> 2.1", require: false # https://github.com/capistrano/rbenv
 end
 
 group :test do
@@ -69,3 +65,5 @@ gem "friendly_id", "~> 5.5" # https://github.com/norman/friendly_id
 gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue/
 
 gem "groupdate", "~> 6.5" # https://github.com/ankane/groupdate
+
+gem "kamal", "~> 2.2", require: false # https://github.com/basecamp/kamal
