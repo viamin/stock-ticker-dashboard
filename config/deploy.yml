@@ -41,8 +41,6 @@ builder:
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 #
 env:
-  clear:
-    DOCKER_FLAGS: "--platform linux/arm64"
   secret:
     - RAILS_MASTER_KEY
 
