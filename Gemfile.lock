@@ -117,7 +117,6 @@ GEM
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    dotenv (3.1.4)
     drb (2.2.1)
     erubi (1.13.0)
     et-orbi (1.2.11)
@@ -345,7 +344,6 @@ DEPENDENCIES
   capybara
   chartkick (~> 5.1)
   debug
-  dotenv (~> 3.1)
   faker (~> 3.5)
   friendly_id (~> 5.5)
   groupdate (~> 6.5)

@@ -43,3 +43,7 @@ set :rbenv_roles, :all # default value
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+# deploy.rb
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle"
+append :linked_files, "config/master.key"

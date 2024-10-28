@@ -2,11 +2,11 @@ class RaccScraper
   attr_reader :client
 
   def initialize
-    @client = Faraday.new(url: ENV.fetch("RACC_SCRAPER_HOST"))
+    @client = Faraday.new(url: Rails.application.config.racc_scraper_host)
   end
 
   def scrape
-    endpoint = ENV.fetch("RACC_SCRAPER_ENDPOINT")
+    endpoint = Rails.application.config.racc_scraper_endpoint
     response = client.get(endpoint)
     doc = JSON.parse(response.body)
     # TODO: update stocks and prices - need schema

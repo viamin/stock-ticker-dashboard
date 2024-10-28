@@ -6,9 +6,9 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-server_ip = ENV.fetch("PI_SERVER_IP")
-server_user = ENV.fetch("PI_SERVER_USER")
-server server_ip, user: server_user, roles: %w[app db web]
+ask :server_ip, ENV["PI_SERVER_IP"]
+ask :server_user, ENV["PI_SERVER_USER"]
+server fetch(:server_ip), user: fetch(:server_user), roles: %w[app db web]
 
 
 # role-based syntax
