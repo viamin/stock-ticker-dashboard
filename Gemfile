@@ -67,3 +67,5 @@ gem "friendly_id", "~> 5.5" # https://github.com/norman/friendly_id
 gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue/
 
 gem "groupdate", "~> 6.5" # https://github.com/ankane/groupdate
+
+gem "faraday", "~> 2.12"
