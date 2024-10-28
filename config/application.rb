@@ -35,8 +35,5 @@ module NyteTicker
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
-    config.racc_scraper_host = Rails.application.credentials.racc_scraper[:host]
-    config.racc_scraper_endpoint = Rails.application.credentials.racc_scraper[:endpoint]
   end
 end
