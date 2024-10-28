@@ -102,10 +102,10 @@ volumes:
 accessories:
   nginx:
     image: nginx:latest
-    ports:
-      - 80:80   # Expose HTTP on port 80
-      # - 443:443 # Optional: Expose HTTPS on port 443
-    volumes:
+    roles:
+      - web
+    port: "8080:80"  # Map container's 80 to host's 8080
+    files:
       - ./config/nginx.conf:/etc/nginx/nginx.conf  # Bind your custom NGINX config
       # Optional: Include SSL certs if using HTTPS
       # - ./certs:/etc/nginx/certs
