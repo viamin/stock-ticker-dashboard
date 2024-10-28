@@ -1,1 +1,52 @@
-/* Application styles */
+/* https: //code-boxx.com/html-css-news-ticker-horizontal-vertical/ */
+/* Ticker Configuration */
+.hwrap {
+  overflow: hidden;
+}
+
+.hmove {
+  display: flex;
+  animation: tickerh linear 20s infinite;
+  font-family: 'NYTETicker', sans-serif;
+  color: red;
+  white-space: nowrap;
+  font-size: 64px;
+}
+
+.hmove:hover {
+  animation-play-state: paused;
+}
+
+.hitem {
+  flex-shrink: 0;
+  padding: 0 80px;
+}
+
+/* Fixed Positioning */
+.ticker-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: black;
+  z-index: 1000;
+  padding: 10px;
+}
+
+/* Main Content Adjustment */
+main {
+  padding-top: 90px;
+  padding-left: 2em;
+}
+
+/* Animation */
+@keyframes tickerh {
+  0% { transform: translatex(100%); }
+  100% { transform: translatex(-400%); }
+}
+
+/* Font */
+@font-face {
+  font-family: 'NYTETicker';
+  src: url('nyte-ticker.ttf') format('truetype');
+}

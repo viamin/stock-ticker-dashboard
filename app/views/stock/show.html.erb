@@ -1,0 +1,10 @@
+<%= render "ticker", stocks: @stocks %>
+<%= turbo_frame_tag "stock-name" do %>
+  <h1><%= @stock.name %> (<%= @stock.ticker %>)</h1>
+<% end %>
+<%= turbo_frame_tag "stock-price" do %>
+  <h2><%= @stock.latest_price.to_s %></h2>
+<% end %>
+<%= turbo_frame_tag "stock-chart" do %>
+  <%= line_chart @chart_data %>
+<% end %>

@@ -32,11 +32,15 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
 group :development, :test do
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
+  gem "dotenv", "~> 3.1" # https://github.com/bkeepers/dotenv
+
+  gem "faker", "~> 3.5" # https://github.com/faker-ruby/faker
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -45,6 +49,12 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  gem "annotate", "~> 3.2" # https://github.com/ctran/annotate_models
+
+  gem "capistrano", "~> 3.19", require: false # https://github.com/capistrano/capistrano
+  gem "capistrano-rails", "~> 1.6", require: false # https://github.com/capistrano/rails
+  gem "capistrano-rbenv", "~> 2.1", require: false # https://github.com/capistrano/rbenv
 end
 
 group :test do
@@ -53,6 +63,10 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "chartkick", "~> 5.1"
+gem "chartkick", "~> 5.1" # https://github.com/ankane/chartkick
 
-gem "sidekiq", "~> 7.3"
+gem "friendly_id", "~> 5.5" # https://github.com/norman/friendly_id
+
+gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue/
+
+gem "groupdate", "~> 6.5" # https://github.com/ankane/groupdate

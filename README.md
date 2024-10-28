@@ -1,24 +1,18 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the dashboard for the NY Trash Exchange and Trashholder's Lounge
 
-Things you may want to cover:
+It is used to scrape prices from the Racc Investment Management project website and display them on a dashboard. It will also update the prices on an arduino LED based ticker, and allow "hackers" to alter the ticker text if they can figure out how.
 
-* Ruby version
+## Deployment
 
-* System dependencies
+The site is hosted on a raspberry pi 4 with a static IP address. To deploy:
 
-* Configuration
+```
+bundle exec cap production deploy
+```
 
-* Database creation
+## Credits
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Dashboard ticker font is adapted from https://www.fontspace.com/subway-ticker-font-f5621
+Arduino ticker is based on https://wp.josh.com/2016/05/20/huge-scrolling-arduino-led-sign/
