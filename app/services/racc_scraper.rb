@@ -9,7 +9,8 @@ class RaccScraper
     response = client.get
     doc = parse_json(response.body)
     doc.each do |stock_json|
-      stock = Stock.find_or_create_by!(ticker: stock_json["symbol"], name: stock_json["companyname"])
+      Stock.find_or_create_by!(ticker: stock_json["symbol"], name: stock_json["companyname"])
+      stock = Stock.find_by(ticker: stock_json["symbol"], name: stock_json["companyname"])
       stock.prices.create(cents: (stock_json["latestprice"] * 100).to_i, date: Time.current)
     end
   end
