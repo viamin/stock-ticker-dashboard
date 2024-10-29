@@ -6,20 +6,25 @@
 
 .hmove {
   display: flex;
-  animation: tickerh linear 20s infinite;
+  animation: tickerh linear 30s infinite;
   font-family: 'NYTETicker', sans-serif;
   color: red;
   white-space: nowrap;
   font-size: 64px;
 }
 
-.hmove:hover {
+/* .hmove:hover {
   animation-play-state: paused;
-}
+} */
 
 .hitem {
   flex-shrink: 0;
-  padding: 0 80px;
+  padding: 0 30px;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 /* Fixed Positioning */

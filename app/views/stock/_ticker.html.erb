@@ -1,7 +1,7 @@
 <div class="ticker-wrapper" data-turbo-permanent>
   <div class="hwrap"><div class="hmove">
     <%- stocks.each do |stock| %>
-      <div class="hitem"><%= stock.ticker %> <%= stock.latest_price %> <%= stock.price_trend_icon %></div>
+      <div class="hitem"><%= link_to "#{stock.ticker} #{stock.latest_price} #{stock.price_trend_icon}", stock_path(stock.ticker), data: { turbo_frame: "stock-data" } %></div>
     <% end %>
   </div></div>
 </div>

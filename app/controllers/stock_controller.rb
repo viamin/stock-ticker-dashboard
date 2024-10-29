@@ -10,6 +10,6 @@ class StockController < ApplicationController
     else
       @stock = @stocks.sample
     end
-    @chart_data = @stock.prices.group_by_hour(:date).average(:cents).transform_values { |v| v / 100.0 }
+    @chart_data = @stock.prices.group_by_hour(:date).average(:cents).transform_values { |v| (v || 0) / 100.0 }
   end
 end
