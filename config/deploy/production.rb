@@ -43,7 +43,7 @@ server "10.0.1.69", user: "bart", roles: %w{app db web}
 # --------------
  set :ssh_options, {
    keys: %w(/home/vscode/.ssh/id_ed25519-nyte),
-   forward_agent: false,
+   forward_agent: true,
    auth_methods: %w(publickey password)
  }
 #

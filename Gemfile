@@ -2,13 +2,16 @@ source "https://rubygems.org"
 
 ruby "2.7.4"
 
+# Pin bigdecimal to a version compatible with Ruby 2.7
+gem "bigdecimal", "~> 1.4.4"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.4", ">= 7.1.4.2"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 # gem "sprockets-rails"
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 1.4"
+gem "sqlite3", "<= 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -48,7 +51,10 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "capistrano", "3.11.2"
+  gem "capistrano-bundler", "~> 1.6"
   gem "capistrano-rails", "1.4.0"
+  gem "ed25519", "~> 1.3"
+  gem "bcrypt_pbkdf", "~> 1.1"
 end
 
 group :development do
