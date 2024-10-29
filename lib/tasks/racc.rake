@@ -1,4 +1,4 @@
-namespace :racc_scrape do
+namespace :racc do
   desc "Scrape RACC data"
   task scrape: :environment do
     RaccScraper.new.scrape

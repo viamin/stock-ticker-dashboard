@@ -27,7 +27,6 @@ class PriceTest < ActiveSupport::TestCase
       ticker: "AAPL"
     )
 
-    binding.irb
     @price = @stock.prices.create!(
       cents: 10050,  # $100.50
       date: Time.current

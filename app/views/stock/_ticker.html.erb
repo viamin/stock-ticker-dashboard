@@ -1,4 +1,4 @@
-<div class="ticker-wrapper">
+<div class="ticker-wrapper" data-turbo-permanent>
   <div class="hwrap"><div class="hmove">
     <%- stocks.each do |stock| %>
       <div class="hitem"><%= stock.ticker %> <%= stock.latest_price %> <%= stock.price_trend_icon %></div>

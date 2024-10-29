@@ -23,4 +23,4 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m    h  dom mon dow   command
-  */10 *  *   *   *     cd /var/www/nyte_ticker/current && /var/www/nyte_ticker/current/bin/bundle exec rake racc_scrape:scrape RAILS_ENV=production >> /var/www/nyte_ticker/shared/log/cron.log 2>&1
+  */10 *  *   *   *     cd /var/www/nyte_ticker/current && /var/www/nyte_ticker/current/bin/bundle exec rake racc:scrape RAILS_ENV=production >> /var/www/nyte_ticker/shared/log/cron.log 2>&1

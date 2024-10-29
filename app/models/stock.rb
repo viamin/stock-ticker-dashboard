@@ -22,6 +22,8 @@ class Stock < ApplicationRecord
 
   scope :with_prices, -> { includes(:prices) }
 
+  broadcasts_refreshes
+
   validates :ticker, presence: true, uniqueness: true
   validates :name, presence: true
 
@@ -35,6 +37,8 @@ class Stock < ApplicationRecord
   end
 
   def price_trend_icon
+    return "-" if price_trend.nil?
+
     price_trend.negative? ? "⏷" : "⏶"  # U+23F7 and U+23F6
   end
 end
