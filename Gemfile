@@ -76,7 +76,6 @@ gem "chartkick" # https://github.com/ankane/chartkick
 
 gem "friendly_id" # https://github.com/norman/friendly_id
 
-gem "solid_queue" # https://github.com/rails/solid_queue/
 
 gem "groupdate" # https://github.com/ankane/groupdate
 

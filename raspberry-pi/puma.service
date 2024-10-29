@@ -1,0 +1,20 @@
+# /etc/systemd/system/puma.service
+
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+[Service]
+Type=simple
+User=bart
+WorkingDirectory=/var/www/nyte_ticker/current
+Environment=RAILS_ENV=production
+ExecStart=/var/www/nyte_ticker/current/bin/bundle exec puma -C /var/www/nyte_ticker/current/config/puma.rb
+ExecStop=/bin/kill -TERM $MAINPID
+Restart=always
+
+StandardOutput=append:/var/www/nyte_ticker/shared/log/puma.stdout.log
+StandardError=append:/var/www/nyte_ticker/shared/log/puma.stderr.log
+
+[Install]
+WantedBy=multi-user.target
