@@ -41,6 +41,8 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets"
 
 set :migration_role, :app
 
+set :assets_manifests, ['app/assets/config/manifest.js']
+
 namespace :deploy do
   namespace :check do
     before :linked_files, :set_master_key do
@@ -51,4 +53,19 @@ namespace :deploy do
       end
     end
   end
+
+  Rake::Task["deploy:assets:backup_manifest"].clear_actions
 end
+
+namespace :puma do
+  desc 'Restart Puma'
+  task :restart do
+    on roles(:app) do
+      execute :sudo, :systemctl, :restart, 'puma'
+      # Or if using a puma service with a different name:
+      # execute :sudo, :systemctl, :restart, 'your-puma-service-name'
+    end
+  end
+end
+
+after 'deploy:finished', 'puma:restart'
