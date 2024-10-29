@@ -17,15 +17,14 @@
 require "test_helper"
 
 class StockTest < ActiveSupport::TestCase
+  fixtures :stocks, :prices
+
   def setup
-    @stock = Stock.create!(
-      ticker: "AAPL",
-      name: "Apple Inc."
-    )
+    @stock = stocks(:one)
   end
 
   test "should be valid with required attributes" do
-    stock = Stock.new(ticker: "MSFT", name: "Microsoft")
+    stock = Stock.new(ticker: "AMZN", name: "Amazon")
     assert stock.valid?
   end
 
@@ -48,10 +47,7 @@ class StockTest < ActiveSupport::TestCase
   end
 
   test "latest_price returns most recent price" do
-    @stock.prices.create!(date: 1.day.ago, cents: 10000)
-    new_price = @stock.prices.create!(date: Time.current, cents: 20000)
-
-    assert_equal new_price, @stock.latest_price
+    assert_equal prices(:one), @stock.latest_price
   end
 
   test "price_trend returns -1 for downward trend" do
