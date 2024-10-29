@@ -41,14 +41,14 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "storage"
 
 set :migration_role, :app
 
-set :assets_manifests, ['app/assets/config/manifest.js']
+set :assets_manifests, [ "app/assets/config/manifest.js" ]
 
 namespace :deploy do
   namespace :check do
     before :linked_files, :set_master_key do
       on roles(:app) do
         unless test("[ -f #{shared_path}/config/master.key ]")
-          upload! 'config/master.key', "#{shared_path}/config/master.key"
+          upload! "config/master.key", "#{shared_path}/config/master.key"
         end
       end
     end
@@ -58,14 +58,14 @@ namespace :deploy do
 end
 
 namespace :puma do
-  desc 'Restart Puma'
+  desc "Restart Puma"
   task :restart do
     on roles(:app) do
-      execute :sudo, :systemctl, :restart, 'puma'
+      execute :sudo, :systemctl, :restart, "puma"
       # Or if using a puma service with a different name:
       # execute :sudo, :systemctl, :restart, 'your-puma-service-name'
     end
   end
 end
 
-after 'deploy:finished', 'puma:restart'
+after "deploy:finished", "puma:restart"
