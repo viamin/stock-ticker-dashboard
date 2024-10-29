@@ -21,7 +21,13 @@ require "test_helper"
 
 class PriceTest < ActiveSupport::TestCase
   def setup
-    @stock = Stock.create!(ticker: "AAPL", name: "Apple Inc.")
+    Stock.destroy_all
+    @stock = Stock.create!(
+      name: "Apple Inc.",
+      ticker: "AAPL"
+    )
+
+    binding.irb
     @price = @stock.prices.create!(
       cents: 10050,  # $100.50
       date: Time.current
