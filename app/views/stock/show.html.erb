@@ -3,5 +3,5 @@
 <%= turbo_frame_tag "stock-data" do %>
   <h1><%= @stock.name %> (<%= @stock.ticker %>)</h1>
   <h2><%= @stock.latest_price.to_s %></h2>
-  <%= line_chart @chart_data %>
+  <%= line_chart @chart_data, min: @chart_min, max: @chart_max, curve: false, points: false, prefix: "$", round: 2, zeros: true %>
 <% end %>

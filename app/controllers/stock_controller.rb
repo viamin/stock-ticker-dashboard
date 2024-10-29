@@ -10,6 +10,10 @@ class StockController < ApplicationController
     else
       @stock = @stocks.sample
     end
-    @chart_data = @stock.prices.group_by_hour(:date).average(:cents).transform_values { |v| (v || 0) / 100.0 }
+    @chart_data = @stock.prices.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
+    chart_values = @chart_data.values
+    padding = (chart_values.max - chart_values.min) * 0.1
+    @chart_min = (chart_values.min - padding).floor
+    @chart_max = (chart_values.max + padding).ceil
   end
 end

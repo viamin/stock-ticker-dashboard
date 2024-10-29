@@ -72,7 +72,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "chartkick" # https://github.com/ankane/chartkick
+gem "chartkick", github: "viamin/chartkick", branch: "ruby27" # https://github.com/ankane/chartkick
 
 gem "friendly_id" # https://github.com/norman/friendly_id
 
