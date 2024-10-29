@@ -2,12 +2,11 @@ class RaccScraper
   attr_reader :client
 
   def initialize
-    @client = Faraday.new(url: Rails.application.credentials.racc_scraper[:host])
+    @client = Faraday.new(url: Rails.application.credentials.racc_scraper[:endpoint])
   end
 
   def scrape
-    endpoint = Rails.application.credentials.racc_scraper[:endpoint]
-    response = client.get(endpoint)
+    response = client.get
     doc = parse_json(response.body)
     doc.each do |stock_json|
       stock = Stock.find_or_create_by!(ticker: stock_json["symbol"], name: stock_json["companyname"])
