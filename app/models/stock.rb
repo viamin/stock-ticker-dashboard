@@ -28,7 +28,7 @@ class Stock < ApplicationRecord
   validates :name, presence: true
 
   def to_s(display: :web)
-    "#{ticker} #{latest_price} #{price_trend_icon(display:)}"
+    "#{ticker} #{latest_price} #{price_trend_icon(display: display)}"
   end
 
   def latest_price
@@ -51,7 +51,7 @@ class Stock < ApplicationRecord
 
   class << self
     def full_ticker(display: :web)
-      all.map { |s| s.to_s(display:) }.join("  ")
+      all.map { |s| s.to_s(display: display) }.join("  ")
     end
   end
 end
