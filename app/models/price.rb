@@ -32,7 +32,7 @@ class Price < ApplicationRecord
     sign = if (display == :web)
       "$"
     else # escape for Arduino
-      "\$"
+      '\$'
     end
     "#{sign}#{dollars}"
   end
