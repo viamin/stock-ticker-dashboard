@@ -34,10 +34,13 @@ CFLAGS="-c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sectio
 # Core files
 avr-gcc $CFLAGS "$ARDUINO_CORE/main.cpp" -o core/main.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/wiring.c" -o core/wiring.o
+avr-gcc $CFLAGS "$ARDUINO_CORE/wiring_digital.c" -o core/wiring_digital.o
+avr-gcc $CFLAGS "$ARDUINO_CORE/wiring_analog.c" -o core/wiring_analog.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/HardwareSerial.cpp" -o core/HardwareSerial.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/HardwareSerial0.cpp" -o core/HardwareSerial0.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/Print.cpp" -o core/Print.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/Stream.cpp" -o core/Stream.o
+avr-gcc $CFLAGS "$ARDUINO_CORE/WMath.cpp" -o core/WMath.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/WString.cpp" -o core/WString.o
 avr-gcc $CFLAGS "$ARDUINO_CORE/hooks.c" -o core/hooks.o
 

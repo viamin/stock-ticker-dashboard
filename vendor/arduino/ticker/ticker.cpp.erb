@@ -1006,7 +1006,7 @@ void showinsider()
       sei();
 
       PORTB |= 0x01;
-      delay(1);
+      delay(<%= @scroll_delay %>)
       PORTB &= ~0x01;
     }
 
