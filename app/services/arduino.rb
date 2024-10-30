@@ -27,7 +27,7 @@ class Arduino
   end
 
   def link
-    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_path}.elf #{project_path}.o core/*.o`
+    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_path}.elf #{project_path}.o #{shared_cores_path}/*.o`
   end
 
   def hex
@@ -54,6 +54,10 @@ class Arduino
 
   def template_path
     Rails.root.join("vendor", "arduino", template_name, "#{template_name}.cpp.erb")
+  end
+
+  def shared_cores_path
+    Rails.root.join("vendor", "arduino", "core")
   end
 
   def core_path
