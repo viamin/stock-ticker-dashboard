@@ -27,6 +27,10 @@ class Stock < ApplicationRecord
   validates :ticker, presence: true, uniqueness: true
   validates :name, presence: true
 
+  def to_s(display: :web)
+    "#{ticker} #{latest_price} #{price_trend_icon(display:)}"
+  end
+
   def latest_price
     prices.order(:date).limit(1).last
   end
@@ -36,9 +40,18 @@ class Stock < ApplicationRecord
     last_price <=> previous_price
   end
 
-  def price_trend_icon
+  def price_trend_icon(display: :web)
     return "-" if price_trend.nil?
+    if (display == :web)
+      price_trend.negative? ? "⏷" : "⏶" # U+23F7 and U+23F6
+    else # for Arduino
+      price_trend.negative? ? "}" : "{" # overriden in the ticker and sign templates
+    end
+  end
 
-    price_trend.negative? ? "⏷" : "⏶"  # U+23F7 and U+23F6
+  class << self
+    def full_ticker(display: :web)
+      all.map { |s| s.to_s(display:) }.join("  ")
+    end
   end
 end

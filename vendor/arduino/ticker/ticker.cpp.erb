@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 // Change this to be at least as long as your pixel string (too long will work fine, just be a little slower)
 
 // #define PIXELS 96*4  // Number of pixels in the string.
@@ -47,11 +49,19 @@ static const uint8_t onBits = 0b11111110; // Bit pattern to write to port to tur
 
 #define NS_TO_CYCLES(n) ((n) / NS_PER_CYCLE)
 
+//                              ######                  #####
+//   ####  ###### #    # #####  #     # # ##### #    # #     #
+//  #      #      ##   # #    # #     # #   #    #  #  #     #
+//   ####  #####  # #  # #    # ######  #   #     ##    #####
+//       # #      #  # # #    # #     # #   #     ##   #     #
+//  #    # #      #   ## #    # #     # #   #    #  #  #     #
+//   ####  ###### #    # #####  ######  #   #   #    #  #####
+
 // Sends a full 8 bits down all the pins, represening a single color of 1 pixel
 // We walk though the 8 bits in colorbyte one at a time. If the bit is 1 then we send the 8 bits of row out. Otherwise we send 0.
 // We send onBits at the first phase of the signal generation. We could just send 0xff, but that mught enable pull-ups on pins that we are not using.
 
-/// Unforntunately we have to drop to ASM for this so we can interleave the computaions durring the delays, otherwise things get too slow.
+// Unforntunately we have to drop to ASM for this so we can interleave the computaions durring the delays, otherwise things get too slow.
 
 // OnBits is the mask of which bits are connected to strips. We pass it on so that we
 // do not turn on unused pins becuase this would enable the pullup. Also, hopefully passing this
@@ -135,16 +145,30 @@ static inline void sendBitx8(const uint8_t row, const uint8_t colorbyte, const u
   // Note that the inter-bit gap can be as long as you want as long as it doesn't exceed the reset timeout (which is A long time)
 }
 
-// Just wait long enough without sending any bots to cause the pixels to latch and display the last sent frame
+//   ####  #    #  ####  #    #
+//  #      #    # #    # #    #
+//   ####  ###### #    # #    #
+//       # #    # #    # # ## #
+//  #    # #    # #    # ##  ##
+//   ####  #    #  ####  #    #
+
+// Just wait long enough without sending any bits to cause the pixels to latch and display the last sent frame
 
 void show()
 {
   delayMicroseconds((RES / 1000UL) + 1); // Round up since the delay must be _at_least_ this long (too short might not work, too long not a problem)
 }
 
+//                              ######                ######   #####  ######
+//   ####  ###### #    # #####  #     #  ####  #    # #     # #     # #     #
+//  #      #      ##   # #    # #     # #    # #    # #     # #       #     #
+//   ####  #####  # #  # #    # ######  #    # #    # ######  #  #### ######
+//       # #      #  # # #    # #   #   #    # # ## # #   #   #     # #     #
+//  #    # #      #   ## #    # #    #  #    # ##  ## #    #  #     # #     #
+//   ####  ###### #    # #####  #     #  ####  #    # #     #  #####  ######
+
 // Send 3 bytes of color data (R,G,B) for a signle pixel down all the connected stringsat the same time
 // A 1 bit in "row" means send the color, a 0 bit means send black.
-
 static inline void sendRowRGB(uint8_t row, uint8_t r, uint8_t g, uint8_t b)
 {
 
@@ -152,6 +176,13 @@ static inline void sendRowRGB(uint8_t row, uint8_t r, uint8_t g, uint8_t b)
   sendBitx8(row, r, onBits); // WS2812 takes colors in GRB order
   sendBitx8(row, b, onBits); // WS2812 takes colors in GRB order
 }
+
+//   ####  #      ######   ##   #####
+//  #    # #      #       #  #  #    #
+//  #      #      #####  #    # #    #
+//  #      #      #      ###### #####
+//  #    # #      #      #    # #   #
+//   ####  ###### ###### #    # #    #
 
 // Turn off all pixels
 
@@ -167,6 +198,14 @@ static inline void clear()
   sei();
   show();
 }
+
+
+//  ######  ####  #    # #####
+//  #      #    # ##   #   #
+//  #####  #    # # #  #   #
+//  #      #    # #  # #   #
+//  #      #    # #   ##   #
+//  #       ####  #    #   #
 
 // This nice 5x7 font from here...
 // http://sunge.awardspace.com/glcd-sd/node4.html
@@ -184,7 +223,7 @@ static inline void clear()
 
 #define FONT_WIDTH 5
 #define INTERCHAR_SPACE 1
-#define ASCII_OFFSET 0x20 // ASSCI code of 1st char in font array
+#define ASCII_OFFSET 0x20 // ASCII code of 1st char in font array
 
 const uint8_t Font5x7[] PROGMEM = {
     0x00, 0x00, 0x00, 0x00, 0x00, //
@@ -278,12 +317,20 @@ const uint8_t Font5x7[] PROGMEM = {
     0x22, 0x14, 0x08, 0x14, 0x22, // x
     0x30, 0x0a, 0x0a, 0x0a, 0x3c, // y
     0x22, 0x26, 0x2a, 0x32, 0x22, // z
-    0x00, 0x10, 0x6c, 0x82, 0x00, // {
+    0x08, 0x18, 0x38, 0x18, 0x08, // { (up arrow)
     0x00, 0x00, 0xfe, 0x00, 0x00, // |
-    0x00, 0x82, 0x6c, 0x10, 0x00, // }
+    0x20, 0x30, 0x38, 0x30, 0x20, // } (down arrow)
     0x10, 0x10, 0x54, 0x38, 0x10, // ~
     0x10, 0x38, 0x54, 0x10, 0x10, // 
 };
+
+//                               #####
+//   ####  ###### #    # #####  #     # #    #   ##   #####
+//  #      #      ##   # #    # #       #    #  #  #  #    #
+//   ####  #####  # #  # #    # #       ###### #    # #    #
+//       # #      #  # # #    # #       #    # ###### #####
+//  #    # #      #   ## #    # #     # #    # #    # #   #
+//   ####  ###### #    # #####   #####  #    # #    # #    #
 
 // Send the pixels to form the specified char, not including interchar space
 // skip is the number of pixels to skip at the begining to enable sub-char smooth scrolling
@@ -315,6 +362,14 @@ static inline void sendChar(uint8_t c, uint8_t skip, uint8_t r, uint8_t g, uint8
   sendRowRGB(0, r, g, b); // Interchar space
 }
 
+//                               #####
+//   ####  ###### #    # #####  #     # ##### #####  # #    #  ####
+//  #      #      ##   # #    # #         #   #    # # ##   # #    #
+//   ####  #####  # #  # #    #  #####    #   #    # # # #  # #
+//       # #      #  # # #    #       #   #   #####  # #  # # #  ###
+//  #    # #      #   ## #    # #     #   #   #   #  # #   ## #    #
+//   ####  ###### #    # #####   #####    #   #    # # #    #  ####
+
 // Show the passed string. The last letter of the string will be in the rightmost pixels of the display.
 // Skip is how many cols of the 1st char to skip for smooth scrolling
 
@@ -331,6 +386,22 @@ static inline void sendString(const char *s, uint8_t skip, const uint8_t r, cons
     sendChar(*s, 0, r, g, b);
   }
 }
+
+
+//    ##   #####   ####    ##   #####  ######
+//   #  #  #    # #    #  #  #  #    # #
+//  #    # #    # #      #    # #    # #####
+//  ###### #####  #      ###### #    # #
+//  #    # #   #  #    # #    # #    # #
+//  #    # #    #  ####  #    # #####  ######
+
+
+//  ######  ####  #    # #####
+//  #      #    # ##   #   #
+//  #####  #    # # #  #   #
+//  #      #    # #  # #   #
+//  #      #    # #   ##   #
+//  #       ####  #    #   #
 
 // A nice arcade font from...
 // http://jared.geek.nz/2014/jan/custom-fonts-for-microcontrollers
@@ -399,7 +470,7 @@ const uint8_t altfont[] PROGMEM = {
     0xce, 0xde, 0xd6, 0xd6, 0xd6, 0xf6, 0xe6, 0x00, // Z
     0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // [
     0xe0, 0x38, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, // \
-  0x00,0xfe,0xfe,0x00,0x00,0x00,0x00,0x00,// ]
+    0x00, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00,// ]
     0x00, 0xfe, 0x02, 0xfe, 0x00, 0x00, 0x00, 0x00, // ^
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // _
     0x00, 0xfe, 0x02, 0xfe, 0x00, 0x00, 0x00, 0x00, // `
@@ -429,11 +500,19 @@ const uint8_t altfont[] PROGMEM = {
     0xee, 0xfe, 0x38, 0x10, 0x38, 0xfe, 0xee, 0x00, // x
     0xe0, 0xf0, 0x3e, 0x1e, 0x3e, 0xf0, 0xe0, 0x00, // y
     0xce, 0xde, 0xd6, 0xd6, 0xd6, 0xf6, 0xe6, 0x00, // z
-    0x38, 0xfe, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00, // {
+    0x08, 0x18, 0x38, 0x18, 0x08, 0x00, 0x00, 0x00, // { (up arrow)
     0xfe, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // |
-    0x00, 0xfe, 0xfe, 0x38, 0x00, 0x00, 0x00, 0x00, // }
+    0x20, 0x30, 0x38, 0x30, 0x20, 0x00, 0x00, 0x00, // } (down arrow)
     0x00, 0xfe, 0x02, 0xfe, 0x00, 0x00, 0x00, 0x00, // ~
 };
+
+//                               #####                          #
+//   ####  ###### #    # #####  #     # #    #   ##   #####    # #   #      #####
+//  #      #      ##   # #    # #       #    #  #  #  #    #  #   #  #        #
+//   ####  #####  # #  # #    # #       ###### #    # #    # #     # #        #
+//       # #      #  # # #    # #       #    # ###### #####  ####### #        #
+//  #    # #      #   ## #    # #     # #    # #    # #   #  #     # #        #
+//   ####  ###### #    # #####   #####  #    # #    # #    # #     # ######   #
 
 // Keep track of where we are in the color cycle between chars
 static uint8_t altbright = 0;
@@ -458,6 +537,14 @@ static inline void sendCharAlt(uint8_t c)
   altbright += 10;
 }
 
+//                               #####                                  #
+//   ####  ###### #    # #####  #     # ##### #####  # #    #  ####    # #   #      #####
+//  #      #      ##   # #    # #         #   #    # # ##   # #    #  #   #  #        #
+//   ####  #####  # #  # #    #  #####    #   #    # # # #  # #      #     # #        #
+//       # #      #  # # #    #       #   #   #####  # #  # # #  ### ####### #        #
+//  #    # #      #   ## #    # #     #   #   #   #  # #   ## #    # #     # #        #
+//   ####  ###### #    # #####   #####    #   #    # # #    #  ####  #     # ######   #
+
 // Show the passed string with the arcade font and a nice vertical color cycle effect
 
 static inline void sendStringAlt(const char *s)
@@ -479,6 +566,14 @@ static inline void sendStringAlt(const char *s)
   }
 }
 
+
+//  #      ###### #####   ####  ###### ##### #    # #####
+//  #      #      #    # #      #        #   #    # #    #
+//  #      #####  #    #  ####  #####    #   #    # #    #
+//  #      #      #    #      # #        #   #    # #####
+//  #      #      #    # #    # #        #   #    # #
+//  ###### ###### #####   ####  ######   #    ####  #
+
 // Set the specified pins up as digital out
 
 void ledsetup()
@@ -487,11 +582,27 @@ void ledsetup()
   PIXEL_DDR |= onBits; // Set all used pins to output
 }
 
+
+//   ####  ###### ##### #    # #####
+//  #      #        #   #    # #    #
+//   ####  #####    #   #    # #    #
+//       # #        #   #    # #####
+//  #    # #        #   #    # #
+//   ####  ######   #    ####  #
+
 void setup()
 {
 
   ledsetup();
 }
+
+
+//   ####    ##   #    # #    #   ##
+//  #    #  #  #  ##  ## ##  ##  #  #
+//  #      #    # # ## # # ## # #    #
+//  #  ### ###### #    # #    # ######
+//  #    # #    # #    # #    # #    #
+//   ####  #    # #    # #    # #    #
 
 // https://learn.adafruit.com/led-tricks-gamma-correction/the-quick-fix
 
@@ -516,12 +627,20 @@ const uint8_t PROGMEM gamma[] = {
 // Map 0-255 visual brightness to 0-255 LED brightness
 #define GAMMA(x) (pgm_read_byte(&gamma[x]))
 
+
+//   ####   ####  #    # #    # ##### #####   ####  #    # #    #
+//  #    # #    # #    # ##   #   #   #    # #    # #    # ##   #
+//  #      #    # #    # # #  #   #   #    # #    # #    # # #  #
+//  #      #    # #    # #  # #   #   #    # #    # # ## # #  # #
+//  #    # #    # #    # #   ##   #   #    # #    # ##  ## #   ##
+//   ####   ####   ####  #    #   #   #####   ####  #    # #    #
+
 void showcountdown()
 {
 
   // Start sequence.....
 
-  const char *countdownstr = "            FIRE ROLLERBALL IN ";
+  const char *countdownstr = "            MANIPULATE TRASH MARKET IN ";
 
   unsigned int count = 600;
 
@@ -582,6 +701,14 @@ void showcountdown()
   }
 }
 
+
+//   ####  #####   ##   #####  ###### # ###### #      #####
+//  #        #    #  #  #    # #      # #      #      #    #
+//   ####    #   #    # #    # #####  # #####  #      #    #
+//       #   #   ###### #####  #      # #      #      #    #
+//  #    #   #   #    # #   #  #      # #      #      #    #
+//   ####    #   #    # #    # #      # ###### ###### #####
+
 void showstarfield()
 {
 
@@ -618,9 +745,17 @@ void showstarfield()
 
     sei();
 
-    // show(); // Not needed - random is alwasy slow enough to trigger a reset
+    // show(); // Not needed - random is always slow enough to trigger a reset
   }
 }
+
+//                              ###
+//   ####  ###### #    # #####   #   ####   ####  #    #
+//  #      #      ##   # #    #  #  #    # #    # ##   #
+//   ####  #####  # #  # #    #  #  #      #    # # #  #
+//       # #      #  # # #    #  #  #      #    # #  # #
+//  #    # #      #   ## #    #  #  #    # #    # #   ##
+//   ####  ###### #    # #####  ###  ####   ####  #    #
 
 static inline void sendIcon(const uint8_t *fontbase, uint8_t which, int8_t shift, uint8_t width, uint8_t r, uint8_t g, uint8_t b)
 {
@@ -651,16 +786,32 @@ static inline void sendIcon(const uint8_t *fontbase, uint8_t which, int8_t shift
   }
 }
 
-#define ENIMIES_WIDTH 12
 
-const uint8_t enimies[] PROGMEM = {
+//  ###### #    # ###### #    # # ######  ####
+//  #      ##   # #      ##  ## # #      #
+//  #####  # #  # #####  # ## # # #####   ####
+//  #      #  # # #      #    # # #           #
+//  #      #   ## #      #    # # #      #    #
+//  ###### #    # ###### #    # # ######  ####
 
-    0x70, 0xf4, 0xfe, 0xda, 0xd8, 0xf4, 0xf4, 0xd8, 0xda, 0xfe, 0xf4, 0x70, // Enimie 1 - open
-    0x72, 0xf2, 0xf4, 0xdc, 0xd8, 0xf4, 0xf4, 0xd8, 0xdc, 0xf4, 0xf2, 0x72, // Enimie 1 - close
-    0x1c, 0x30, 0x7c, 0xda, 0x7a, 0x78, 0x7a, 0xda, 0x7c, 0x30, 0x1c, 0x00, // Enimie 2 - open
-    0xf0, 0x3a, 0x7c, 0xd8, 0x78, 0x78, 0x78, 0xd8, 0x7c, 0x3a, 0xf0, 0x00, // Enimie 2 - closed
+#define ENEMIES_WIDTH 12
+
+const uint8_t enemies[] PROGMEM = {
+
+    0x70, 0xf4, 0xfe, 0xda, 0xd8, 0xf4, 0xf4, 0xd8, 0xda, 0xfe, 0xf4, 0x70, // Enemy 1 - open
+    0x72, 0xf2, 0xf4, 0xdc, 0xd8, 0xf4, 0xf4, 0xd8, 0xdc, 0xf4, 0xf2, 0x72, // Enemy 1 - close
+    0x1c, 0x30, 0x7c, 0xda, 0x7a, 0x78, 0x7a, 0xda, 0x7c, 0x30, 0x1c, 0x00, // Enemy 2 - open
+    0xf0, 0x3a, 0x7c, 0xd8, 0x78, 0x78, 0x78, 0xd8, 0x7c, 0x3a, 0xf0, 0x00, // Enemy 2 - closed
     0x92, 0x54, 0x10, 0x82, 0x44, 0x00, 0x00, 0x44, 0x82, 0x10, 0x54, 0x92, // Explosion
 };
+
+
+//  # #    # #    #   ##   #####  ###### #####  #    # # #####  ######
+//  # ##   # #    #  #  #  #    # #      #    # #    # # #    # #
+//  # # #  # #    # #    # #    # #####  #    # #    # # #    # #####
+//  # #  # # #    # ###### #    # #      #####  # ## # # #####  #
+//  # #   ##  #  #  #    # #    # #      #   #  ##  ## # #      #
+//  # #    #   ##   #    # #####  ###### #    # #    # # #      ######
 
 void showinvaderwipe(uint8_t which, const char *pointsStr, uint8_t r, uint8_t g, uint8_t b)
 {
@@ -673,7 +824,7 @@ void showinvaderwipe(uint8_t which, const char *pointsStr, uint8_t r, uint8_t g,
 
     cli();
     sendStringAlt("                ");
-    sendIcon(enimies, which, 0, ENIMIES_WIDTH, r, g, b);
+    sendIcon(enemies, which, 0, ENEMIES_WIDTH, r, g, b);
     for (uint8_t i = 0; i <= p; i++)
     {
       sendChar(*(pointsStr + i), 0, r >> 2, g >> 2, b >> 2); // Dim text slightly
@@ -685,13 +836,22 @@ void showinvaderwipe(uint8_t which, const char *pointsStr, uint8_t r, uint8_t g,
   delay(1500);
 }
 
+
+
+//  # #    # #    #   ##   #####  ###### #####   ####
+//  # ##   # #    #  #  #  #    # #      #    # #
+//  # # #  # #    # #    # #    # #####  #    #  ####
+//  # #  # # #    # ###### #    # #      #####       #
+//  # #   ##  #  #  #    # #    # #      #   #  #    #
+//  # #    #   ##   #    # #####  ###### #    #  ####
+
 void showinvaders()
 {
 
   showinvaderwipe(3, " = 20 POINTS", 0x80, 0x80, 0x80);
   showinvaderwipe(1, " = 10 POINTS", 0x00, 0xff, 0x00);
 
-  uint8_t acount = PIXELS / (ENIMIES_WIDTH + FONT_WIDTH); // How many aliens do we have room for?
+  uint8_t acount = PIXELS / (ENEMIES_WIDTH + FONT_WIDTH); // How many aliens do we have room for?
 
   for (int8_t row = -4; row < 6; row++)
   { // Walk down the rows
@@ -738,7 +898,7 @@ void showinvaders()
       for (uint8_t l = 0; l < acount; l++)
       {
 
-        sendIcon(enimies, p & 1, row, ENIMIES_WIDTH, 0xFF, 0xFF, 0xFF);
+        sendIcon(enemies, p & 1, row, ENEMIES_WIDTH, 0xFF, 0xFF, 0xFF);
         sendChar(' ', 0, 0x00, 0x00, 0x00); // No over crowding
       }
 
@@ -748,6 +908,15 @@ void showinvaders()
   }
   // delay(200);
 }
+
+
+
+//    ##   #      #      #   #  ####  #    # #####  #####    ##    ####  ######
+//   #  #  #      #       # #  #    # #    # #    # #    #  #  #  #      #
+//  #    # #      #        #   #    # #    # #    # #####  #    #  ####  #####
+//  ###### #      #        #   #    # #    # #####  #    # ######      # #
+//  #    # #      #        #   #    # #    # #   #  #    # #    # #    # #
+//  #    # ###### ######   #    ####   ####  #    # #####  #    #  ####  ######
 
 void showallyourbase()
 {
@@ -766,51 +935,21 @@ void showallyourbase()
   }
 }
 
+//  # #    #  ####  # #####  ###### #####
+//  # ##   # #      # #    # #      #    #
+//  # # #  #  ####  # #    # #####  #    #
+//  # #  # #      # # #    # #      #####
+//  # #   ## #    # # #    # #      #   #
+//  # #    #  ####  # #####  ###### #    #
+
 #define JAB_MAX_BRIGHTNESS 0xff
 #define JAB_MIN_BRIGHTNESS 0x00
 #define JAB_STEPS (JAB_MAX_BRIGHTNESS - JAB_MIN_BRIGHTNESS)
 
-void showjabber()
+void showinsider()
 {
 
-  const char *m =
-
-      "Twas brillig, and the slithy toves "
-      "Did gyre and gimble in the wabe: "
-      "All mimsy were the borogoves, "
-      "And the mome raths outgrabe. "
-
-      "Beware the Jabberwock, my son! "
-      "The jaws that bite, the claws that catch! "
-      "Beware the Jubjub bird, and shun "
-      "The frumious Bandersnatch! "
-
-      "He took his vorpal sword in hand; "
-      "Long time the manxome foe he sought- "
-      "So rested he by the Tumtum tree "
-      "And stood awhile in thought. "
-
-      "And, as in uffish thought he stood, "
-      "The Jabberwock, with eyes of flame, "
-      "Came whiffling through the tulgey wood, "
-      "And burbled as it came! "
-
-      "One, two! One, two! And through and through "
-      "The vorpal blade went snicker-snack! "
-      "He left it dead, and with its head "
-      "He went galumphing back. "
-
-      "And hast thou slain the Jabberwock? "
-      "Come to my arms, my beamish boy! "
-      "O frabjous day! Callooh! Callay! "
-      "He chortled in his joy. "
-
-      "Twas brillig, and the slithy toves "
-      "Did gyre and gimble in the wabe: "
-      "All mimsy were the borogoves, "
-      "And the mome raths outgrabe."
-
-      ;
+  const char *m = <%= @insider_text %>;
 
   // Text foreground color cycle effect
   uint8_t sector = 0;
@@ -875,14 +1014,66 @@ void showjabber()
   }
 }
 
+//  #######
+//     #    #  ####  #    # ###### #####
+//     #    # #    # #   #  #      #    #
+//     #    # #      ####   #####  #    #
+//     #    # #      #  #   #      #####
+//     #    # #    # #   #  #      #   #
+//     #    #  ####  #    # ###### #    #
+
+#define COLOR_R 0x20
+#define COLOR_G 0x00
+#define COLOR_B 0x00
+
+void showticker()
+{
+
+  const char *m = <%= @ticker_text %>;
+
+  uint8_t step = 0;
+
+  while (*m)
+  {
+
+
+    for (uint8_t step = 0; step < FONT_WIDTH + INTERCHAR_SPACE; step++)
+    { // step though each column of the 1st char for smooth scrolling
+
+      cli();
+
+      sendString(m, step, COLOR_R, COLOR_G, COLOR_B);
+
+      sei();
+
+      PORTB |= 0x01;
+      delay(1);
+      PORTB &= ~0x01;
+    }
+
+    m++;
+  }
+}
+
+
+//  #       ####   ####  #####
+//  #      #    # #    # #    #
+//  #      #    # #    # #    #
+//  #      #    # #    # #####
+//  #      #    # #    # #
+//  ######  ####   ####  #
+
 void loop()
 {
 
-  showcountdown();
-  showallyourbase();
-  showstarfield();
-  showinvaders();
-  showjabber();
+  <% if @insider_text %>
+    showcountdown();
+    showstarfield();
+    showinsider();
+    showticker();
+  <% else %>
+    showticker();
+  <% end %>
 
   // TODO: Actually sample the state of the pullup on unused pins and OR it into the mask so we maintain the state.
   // Must do AFTER the cli().

@@ -5,11 +5,7 @@ class StockController < ApplicationController
 
   def show
     @stocks = Stock.all.with_prices
-    if params[:id].present?
-      @stock = @stocks.find { |s| s.ticker == params[:id] } || @stocks.sample
-    else
-      @stock = @stocks.sample
-    end
+    @stock = @stocks.find { |s| s.ticker == params[:id] } || @stocks.sample
     @chart_data = @stock.prices.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
     chart_values = @chart_data.values
     padding = (chart_values.max - chart_values.min) * 0.1

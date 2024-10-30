@@ -6,7 +6,7 @@
 
 .hmove {
   display: flex;
-  animation: tickerh linear 240s infinite;
+  animation: tickerh linear 600s infinite;
   font-family: 'NYTETicker', sans-serif;
   color: red;
   white-space: nowrap;
