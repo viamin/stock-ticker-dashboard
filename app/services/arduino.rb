@@ -36,7 +36,7 @@ class Arduino
   end
 
   def upload
-    `avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -l #{log_file} -U flash:w:#{project_path}.hex`
+    `avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:#{project_path}.hex 2>>#{log_file}`
   end
 
   private
