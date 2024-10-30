@@ -24,15 +24,15 @@ class Arduino
   end
 
   def compile
-    `avr-gcc #{cflags} #{project_path}.cpp -o #{project_path}.o`
+    `avr-gcc #{cflags} #{project_path}.cpp -o #{project_path}.o 2>>#{log_file}`
   end
 
   def link
-    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_path}.elf #{project_path}.o #{shared_cores_path}/*.o`
+    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_path}.elf #{project_path}.o #{shared_cores_path}/*.o 2>>#{log_file}`
   end
 
   def hex
-    `avr-objcopy -O ihex -R .eeprom #{project_path}.elf #{project_path}.hex`
+    `avr-objcopy -O ihex -R .eeprom #{project_path}.elf #{project_path}.hex 2>>#{log_file}`
   end
 
   def upload
