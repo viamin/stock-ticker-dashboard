@@ -28,7 +28,12 @@ class Price < ApplicationRecord
     cents / 100.0
   end
 
-  def to_s
-    "$#{dollars}"
+  def to_s(display: :web)
+    sign = if (display == :web)
+      "$"
+    else # escape for Arduino
+      "\$"
+    end
+    "#{sign}#{dollars}"
   end
 end

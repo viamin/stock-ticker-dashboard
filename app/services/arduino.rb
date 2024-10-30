@@ -6,23 +6,32 @@ class Arduino
     @insider_text = insider_text
   end
 
+  def update!
+    generate_template
+    compile
+    link
+    hex
+    upload
+  end
+
   def generate_template
     template = File.read(template_path)
     source_code = ERB.new(template)
     @ticker_text = Stock.full_ticker(display: :arduino)
-    source_code.result(binding)
+    code = source_code.result(binding)
+    File.open(project_path + ".cpp", "w") { |file| file.write(code) }
   end
 
   def compile
-    `avr-gcc #{cflags} #{project_name}.cpp -o #{project_name}.o`
+    `avr-gcc #{cflags} #{project_path}.cpp -o #{project_path}.o`
   end
 
   def link
-    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_name}.elf #{project_name}.o core/*.o`
+    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_path}.elf #{project_path}.o core/*.o`
   end
 
   def hex
-    `avr-objcopy -O ihex -R .eeprom #{project_name}.elf #{project_name}.hex`
+    `avr-objcopy -O ihex -R .eeprom #{project_path}.elf #{project_path}.hex`
   end
 
   def upload
