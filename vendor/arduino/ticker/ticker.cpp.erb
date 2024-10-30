@@ -911,29 +911,6 @@ void showinvaders()
 
 
 
-//    ##   #      #      #   #  ####  #    # #####  #####    ##    ####  ######
-//   #  #  #      #       # #  #    # #    # #    # #    #  #  #  #      #
-//  #    # #      #        #   #    # #    # #    # #####  #    #  ####  #####
-//  ###### #      #        #   #    # #    # #####  #    # ######      # #
-//  #    # #      #        #   #    # #    # #   #  #    # #    # #    # #
-//  #    # ###### ######   #    ####   ####  #    # #####  #    #  ####  ######
-
-void showallyourbase()
-{
-
-  const char *allyourbase = "CAT: ALL YOUR BASE ARE BELONG TO US !!!";
-
-  clear();
-  for (unsigned int slide = 10000; slide; slide -= 10)
-  {
-    altbright = (slide & 0xff);
-    cli();
-    sendChar(' ', 0, 0, 0, 0);
-    sendStringAlt(allyourbase);
-    sei();
-    show();
-  }
-}
 
 //  # #    #  ####  # #####  ###### #####
 //  # ##   # #      # #    # #      #    #
@@ -942,75 +919,20 @@ void showallyourbase()
 //  # #   ## #    # # #    # #      #   #
 //  # #    #  ####  # #####  ###### #    #
 
-#define JAB_MAX_BRIGHTNESS 0xff
-#define JAB_MIN_BRIGHTNESS 0x00
-#define JAB_STEPS (JAB_MAX_BRIGHTNESS - JAB_MIN_BRIGHTNESS)
-
 void showinsider()
 {
 
-  const char *m = "<%= @insider_text %>";
+  const char *insider = "<%= @insider_text %>";
 
-  // Text foreground color cycle effect
-  uint8_t sector = 0;
-  uint8_t step = 0;
-
-  while (*m)
+  clear();
+  for (unsigned int slide = 10000; slide; slide -= 10)
   {
-
-    if (step == JAB_STEPS)
-    {
-      step = 0;
-      sector++;
-      if (sector == 3)
-      {
-        sector = 0;
-      }
-    }
-    else
-    {
-      step++;
-    }
-
-    uint8_t rampup = JAB_MIN_BRIGHTNESS + step;
-    uint8_t rampdown = JAB_MIN_BRIGHTNESS + (JAB_STEPS - step);
-
-    uint8_t r, g, b;
-
-    switch (sector)
-    {
-    case 0:
-      r = rampup;
-      g = rampdown;
-      b = JAB_MIN_BRIGHTNESS;
-      break;
-    case 1:
-      r = rampdown;
-      g = JAB_MIN_BRIGHTNESS;
-      b = rampup;
-      break;
-    case 2:
-      r = JAB_MIN_BRIGHTNESS;
-      g = rampup;
-      b = rampdown;
-      break;
-    };
-
-    for (uint8_t step = 0; step < FONT_WIDTH + INTERCHAR_SPACE; step++)
-    { // step though each column of the 1st char for smooth scrolling
-
-      cli();
-
-      sendString(m, step, r, g, b);
-
-      sei();
-
-      PORTB |= 0x01;
-      delay(<%= @scroll_delay %>)
-      PORTB &= ~0x01;
-    }
-
-    m++;
+    altbright = (slide & 0xff);
+    cli();
+    sendChar(' ', 0, 0, 0, 0);
+    sendStringAlt(insider);
+    sei();
+    show();
   }
 }
 
