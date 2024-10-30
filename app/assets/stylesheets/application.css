@@ -6,7 +6,7 @@
 
 .hmove {
   display: flex;
-  animation: tickerh linear 30s infinite;
+  animation: tickerh linear 240s infinite;
   font-family: 'NYTETicker', sans-serif;
   color: red;
   white-space: nowrap;
@@ -47,7 +47,7 @@ main {
 /* Animation */
 @keyframes tickerh {
   0% { transform: translatex(100%); }
-  100% { transform: translatex(-400%); }
+  100% { transform: translatex(-9900%); }
 }
 
 /* Font */

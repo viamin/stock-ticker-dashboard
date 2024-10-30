@@ -31,7 +31,10 @@
         "rubyLsp.rubyVersionManager": {
           "identifier": "rbenv"
         }
-      }
+      },
+      "extensions": [
+        "moozzyk.Arduino"
+      ]
     }
   },
 
@@ -40,12 +43,11 @@
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": {
-    "ruby-lsp": "gem install ruby-lsp",
-    "setup": "bin/setup",
-    "ssh-perms": "chmod 600 /home/vscode/.ssh/*"
+    "setup": "${containerWorkspaceFolder}/bin/setup"
   },
 
   "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly"
+    "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,readonly",
+    "source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind"
   ]
 }
