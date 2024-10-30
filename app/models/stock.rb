@@ -28,7 +28,7 @@ class Stock < ApplicationRecord
   validates :name, presence: true
 
   def to_s(display: :web)
-    "#{ticker} #{latest_price.to_s(display: display)} #{price_trend_icon(display: display)}"
+    "#{ticker} #{latest_price} #{price_trend_icon(display: display)}"
   end
 
   def latest_price
