@@ -1,0 +1,2 @@
+module ManipulationHelper
+end

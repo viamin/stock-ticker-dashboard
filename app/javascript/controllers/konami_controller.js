@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="konami"
 export default class extends Controller {
   connect() {
-    this.konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // Up, Up, Down, Down, Left, Right, Left, Right, B, A
+    this.konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65, 13]; // Up, Up, Down, Down, Left, Right, Left, Right, B, A, Enter
     this.konamiIndex = 0;
     this.handleKeydown = this.handleKeydown.bind(this);
     window.addEventListener('keydown', this.handleKeydown);
@@ -28,6 +28,6 @@ export default class extends Controller {
   }
 
   redirect() {
-    window.location.href = "/stock/manipulate";
+    window.location.href = "/manipulation/new";
   }
 }
