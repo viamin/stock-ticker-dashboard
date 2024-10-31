@@ -4,7 +4,7 @@ class StockController < ApplicationController
   end
 
   def show
-    @stocks = Stock.all.with_prices
+    @stocks = Stock.all
     @stock = @stocks.find { |s| s.ticker == params[:id] } || @stocks.sample
     @chart_data = @stock.prices.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
     chart_values = @chart_data.values
