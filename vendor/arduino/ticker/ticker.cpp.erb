@@ -667,17 +667,17 @@ void showcountdown()
 
     // uint8_t brightness = GAMMA(((count % 100) * 256) / 100);
     // try half the max brightness
-    uint8_t brightness = GAMMA(((count % 100) * 128) / 100);
+    uint8_t brightness = GAMMA(((count % 100) * 64) / 100);
 
     cli();
     sendString(countdownstr, 1, brightness, brightness, brightness);
 
     sendRowRGB(0x00, 0, 0, 0xff);
 
-    sendChar(char1, 0, 0x50, 0, 0);
-    sendChar('.', 0, 0x50, 0, 0);
-    sendChar(char2, 0, 0x50, 0, 0);
-    sendChar(char3, 0, 0x50, 0, 0);
+    sendChar(char1, 0, 0x<%= @insider_brightness%>, 0, 0);
+    sendChar('.', 0, 0x<%= @insider_brightness%>, 0, 0);
+    sendChar(char2, 0, 0x<%= @insider_brightness%>, 0, 0);
+    sendChar(char3, 0, 0x<%= @insider_brightness%>, 0, 0);
 
     sei();
     show();

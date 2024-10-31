@@ -4,7 +4,7 @@ class Arduino
   def initialize(
     template_name: "ticker",
     insider_text: nil,
-    insider_brightness: "40", # should be hexadecimal
+    insider_brightness: "20", # should be hexadecimal
     scroll_delay: 10,
     ticker_red: "10", # hexadecimal
     ticker_green: "00", # hexadecimal
