@@ -10,7 +10,7 @@ class Arduino
     ticker_blue: "00" # hexadecimal
   )
     @template_name = template_name
-    @insider_text = insider_text.upcase.center(39)
+    @insider_text = insider_text.upcase.center(29)
     @scroll_delay = scroll_delay
     @ticker_red = ticker_red
     @ticker_green = ticker_green
