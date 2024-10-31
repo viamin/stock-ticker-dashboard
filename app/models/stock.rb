@@ -42,7 +42,7 @@ class Stock < ApplicationRecord
 
   def price_trend_icon(display: :web)
     return "-" if price_trend.nil?
-    if (display == :web)
+    if display == :web
       price_trend.negative? ? "⏷" : "⏶" # U+23F7 and U+23F6
     else # for Arduino
       price_trend.negative? ? "}" : "{" # overriden in the ticker and sign templates
