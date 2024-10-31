@@ -33,7 +33,8 @@
         }
       },
       "extensions": [
-        "moozzyk.Arduino"
+        "moozzyk.Arduino",
+        "heyimfuzz.banner-comments"
       ]
     }
   },
