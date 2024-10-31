@@ -1,9 +1,18 @@
 class Arduino
   attr_reader :template_name
 
-  def initialize(template_name: "ticker", insider_text: nil, scroll_delay: 10, ticker_red: "10", ticker_green: "00", ticker_blue: "00")
+  def initialize(
+    template_name: "ticker",
+    insider_text: nil,
+    insider_brightness: "40", # should be hexadecimal
+    scroll_delay: 10,
+    ticker_red: "10", # hexadecimal
+    ticker_green: "00", # hexadecimal
+    ticker_blue: "00" # hexadecimal
+  )
     @template_name = template_name
-    @insider_text = insider_text
+    @insider_text = insider_text.center(39)
+    @insider_brightness = insider_brightness
     @scroll_delay = scroll_delay
     @ticker_red = ticker_red
     @ticker_green = ticker_green

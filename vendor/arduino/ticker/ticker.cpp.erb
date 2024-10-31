@@ -167,7 +167,7 @@ void show()
 //  #    # #      #   ## #    # #    #  #    # ##  ## #    #  #     # #     #
 //   ####  ###### #    # #####  #     #  ####  #    # #     #  #####  ######
 
-// Send 3 bytes of color data (R,G,B) for a signle pixel down all the connected stringsat the same time
+// Send 3 bytes of color data (R,G,B) for a single pixel down all the connected strings at the same time
 // A 1 bit in "row" means send the color, a 0 bit means send black.
 static inline void sendRowRGB(uint8_t row, uint8_t r, uint8_t g, uint8_t b)
 {
@@ -517,6 +517,8 @@ const uint8_t altfont[] PROGMEM = {
 // Keep track of where we are in the color cycle between chars
 static uint8_t altbright = 0;
 
+const uint8_t MAX_BRIGHTNESS = <%= @insider_brightness %>
+
 // Send a char with a column-based color cycle
 static inline void sendCharAlt(uint8_t c)
 {
@@ -528,9 +530,14 @@ static inline void sendCharAlt(uint8_t c)
   while (col--)
   {
 
-    sendRowRGB(pgm_read_byte_near(charbase++), altbright, 0, 0x80);
+    sendRowRGB(pgm_read_byte_near(charbase++), altbright, 0, 0x<%= @insider_brightness %>);
 
     altbright += 10;
+
+    if (altbright > MAX_BRIGHTNESS)
+    {
+      altbright = 0;
+    }
   }
 
   sendRowRGB(0, 0, 0, 0);
@@ -658,19 +665,19 @@ void showcountdown()
     uint8_t char2 = digit2 + '0';
     uint8_t char3 = digit3 + '0';
 
-    uint8_t brightness = GAMMA(((count % 100) * 256) / 100);
+    // uint8_t brightness = GAMMA(((count % 100) * 256) / 100);
+    // try half the max brightness
+    uint8_t brightness = GAMMA(((count % 100) * 128) / 100);
 
     cli();
     sendString(countdownstr, 1, brightness, brightness, brightness);
 
     sendRowRGB(0x00, 0, 0, 0xff);
 
-    //  sendChar( '0' , 0 , 0x80, 0 , 0 );
-
-    sendChar(char1, 0, 0x80, 0, 0);
-    sendChar('.', 0, 0x80, 0, 0);
-    sendChar(char2, 0, 0x80, 0, 0);
-    sendChar(char3, 0, 0x80, 0, 0);
+    sendChar(char1, 0, 0x50, 0, 0);
+    sendChar('.', 0, 0x50, 0, 0);
+    sendChar(char2, 0, 0x50, 0, 0);
+    sendChar(char3, 0, 0x50, 0, 0);
 
     sei();
     show();
@@ -908,8 +915,6 @@ void showinvaders()
   }
   // delay(200);
 }
-
-
 
 
 //  # #    #  ####  # #####  ###### #####

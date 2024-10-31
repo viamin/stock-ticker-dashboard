@@ -12,6 +12,4 @@
 #
 class Manipulation < ApplicationRecord
   validates :message, presence: true, length: { maximum: 39 }
-
-
 end
