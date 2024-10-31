@@ -1,15 +1,11 @@
 class Arduino
-  attr_reader :template_name
-
   def initialize(
-    template_name: "ticker",
     insider_text: nil,
     scroll_delay: 10,
     ticker_red: "10", # hexadecimal
     ticker_green: "00", # hexadecimal
     ticker_blue: "00" # hexadecimal
   )
-    @template_name = template_name
     @insider_text = insider_text.upcase.center(29)
     @scroll_delay = scroll_delay
     @ticker_red = ticker_red
@@ -50,6 +46,10 @@ class Arduino
   end
 
   private
+
+  def template_name
+    "ticker"
+  end
 
   def project_path
     File.join(temp_directory, template_name)
