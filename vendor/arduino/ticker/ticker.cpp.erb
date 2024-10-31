@@ -517,7 +517,7 @@ const uint8_t altfont[] PROGMEM = {
 // Keep track of where we are in the color cycle between chars
 static uint8_t altbright = 0;
 
-const uint8_t MAX_BRIGHTNESS = <%= @insider_brightness %>
+const uint8_t MAX_BRIGHTNESS = <%= @insider_brightness %>;
 
 // Send a char with a column-based color cycle
 static inline void sendCharAlt(uint8_t c)
