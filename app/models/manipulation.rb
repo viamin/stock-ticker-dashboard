@@ -11,7 +11,7 @@
 #  updated_at    :datetime         not null
 #
 class Manipulation < ApplicationRecord
-  validates :message, presence: true, length: { maximum: 30 }
+  validates :message, presence: true, length: { maximum: 39 }
 
 
 end

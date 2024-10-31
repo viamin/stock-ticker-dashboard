@@ -1,10 +1,13 @@
 class Arduino
   attr_reader :template_name
 
-  def initialize(template_name: "ticker", insider_text: nil, scroll_delay: 10)
+  def initialize(template_name: "ticker", insider_text: nil, scroll_delay: 10, ticker_red: "10", ticker_green: "00", ticker_blue: "00")
     @template_name = template_name
     @insider_text = insider_text
     @scroll_delay = scroll_delay
+    @ticker_red = ticker_red
+    @ticker_green = ticker_green
+    @ticker_blue = ticker_blue
   end
 
   def update!
