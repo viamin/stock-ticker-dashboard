@@ -10,7 +10,7 @@ class RaccScraperJobTest < ActiveJob::TestCase
     mock_scraper = Object.new
     def mock_scraper.scrape; end # Define a scrape method that does nothing
 
-    RaccScraper.stub :new, mock_scraper do
+    RaccCity.stub :new, mock_scraper do
       # Assert no errors are raised
       assert_nothing_raised do
         RaccScraperJob.perform_now
@@ -36,7 +36,7 @@ class RaccScraperJobTest < ActiveJob::TestCase
       raise StandardError, "Scraping failed"
     end
 
-    RaccScraper.stub :new, mock_scraper do
+    RaccCity.stub :new, mock_scraper do
       assert_raises StandardError do
         RaccScraperJob.perform_now
       end

@@ -1,4 +1,4 @@
-class RaccScraper
+class RaccCity
   attr_reader :client
 
   def initialize

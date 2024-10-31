@@ -1,6 +1,6 @@
 namespace :racc do
-  desc "Scrape RACC data"
+  desc "Scrape RaccCity data"
   task scrape: :environment do
-    RaccScraper.new.scrape
+    RaccCity.new.scrape
   end
 end
