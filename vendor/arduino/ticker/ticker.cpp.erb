@@ -517,8 +517,6 @@ const uint8_t altfont[] PROGMEM = {
 // Keep track of where we are in the color cycle between chars
 static uint8_t altbright = 0;
 
-// const uint8_t MAX_BRIGHTNESS = <%= @insider_brightness %>;
-
 // Send a char with a column-based color cycle
 static inline void sendCharAlt(uint8_t c)
 {
@@ -530,7 +528,7 @@ static inline void sendCharAlt(uint8_t c)
   while (col--)
   {
 
-    sendRowRGB(pgm_read_byte_near(charbase++), altbright, 0, 0x<%= @insider_brightness %>);
+    sendRowRGB(pgm_read_byte_near(charbase++), altbright, 0, 0x80);
 
     altbright += 10;
 
@@ -674,10 +672,10 @@ void showcountdown()
 
     sendRowRGB(0x00, 0, 0, 0xff);
 
-    sendChar(char1, 0, 0x<%= @insider_brightness%>, 0, 0);
-    sendChar('.', 0, 0x<%= @insider_brightness%>, 0, 0);
-    sendChar(char2, 0, 0x<%= @insider_brightness%>, 0, 0);
-    sendChar(char3, 0, 0x<%= @insider_brightness%>, 0, 0);
+    sendChar(char1, 0, 0x80, 0, 0);
+    sendChar('.', 0, 0x80, 0, 0);
+    sendChar(char2, 0, 0x80, 0, 0);
+    sendChar(char3, 0, 0x80, 0, 0);
 
     sei();
     show();

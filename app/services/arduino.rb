@@ -4,7 +4,6 @@ class Arduino
   def initialize(
     template_name: "ticker",
     insider_text: nil,
-    insider_brightness: "20", # should be hexadecimal
     scroll_delay: 10,
     ticker_red: "10", # hexadecimal
     ticker_green: "00", # hexadecimal
@@ -12,7 +11,6 @@ class Arduino
   )
     @template_name = template_name
     @insider_text = insider_text.center(39)
-    @insider_brightness = insider_brightness
     @scroll_delay = scroll_delay
     @ticker_red = ticker_red
     @ticker_green = ticker_green
