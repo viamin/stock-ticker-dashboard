@@ -11,6 +11,14 @@
   color: red;
   white-space: nowrap;
   font-size: 64px;
+
+  .stock-green {
+    color: green;
+  }
+
+  .stock-ref {
+    color: red;
+  }
 }
 
 /* .hmove:hover {
