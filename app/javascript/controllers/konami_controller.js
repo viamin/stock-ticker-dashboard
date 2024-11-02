@@ -28,6 +28,6 @@ export default class extends Controller {
   }
 
   redirect() {
-    Turbo.visit("/manipulations/new", { frame: "_top" });
+    Turbo.visit("/manipulations/new", { frame: "stock-data" });
   }
 }
