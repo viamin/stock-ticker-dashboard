@@ -10,14 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_31_052115) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_02_052616) do
   create_table "manipulations", force: :cascade do |t|
     t.text "message"
-    t.string "ticker"
+    t.string "category"
     t.string "manipulator"
     t.string "racc_username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "action"
+    t.string "value_type"
+    t.string "newvalue"
   end
 
   create_table "prices", force: :cascade do |t|

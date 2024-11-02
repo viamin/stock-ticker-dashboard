@@ -44,7 +44,8 @@
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": {
-    "setup": "${containerWorkspaceFolder}/bin/setup"
+    "setup": "${containerWorkspaceFolder}/bin/setup",
+    "dev_setup": "gem install foreman"
   },
 
   "mounts": [

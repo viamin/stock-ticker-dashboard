@@ -1,11 +1,8 @@
-class RaccScraper
+class RaccCity
   attr_reader :client
 
-  def initialize
-    @client = Faraday.new(url: Rails.application.credentials.racc_scraper[:endpoint])
-  end
-
   def scrape
+    client = Faraday.new(url: "#{Rails.application.credentials.racc_city[:base_url]}/ticker/#{api_secret}")
     response = client.get
     doc = parse_json(response.body)
     doc.each do |stock_json|
@@ -13,6 +10,20 @@ class RaccScraper
       stock = Stock.find_by(ticker: stock_json["symbol"], name: stock_json["companyname"])
       stock.prices.create(cents: (stock_json["latestprice"] * 100).to_i, date: Time.current)
     end
+  end
+
+  def manipulate(manipulation)
+    client.post(manipulation_url, manipulation.to_json, "Content-Type" => "application/json")
+  end
+
+  private
+
+  def api_secret
+    Rails.application.credentials.racc_city[:secret]
+  end
+
+  def manipulation_url
+    "#{Rails.application.credentials.racc_city[:base_url]}/manipulate/#{api_secret}"
   end
 
   def parse_json(json)

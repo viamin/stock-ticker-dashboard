@@ -28,6 +28,6 @@ export default class extends Controller {
   }
 
   redirect() {
-    window.location.href = "/manipulation/new";
+    window.location.href = "/manipulations/new";
   }
 }
