@@ -14,11 +14,11 @@
 #  updated_at    :datetime         not null
 #
 class Manipulation < ApplicationRecord
-  validates :category, inclusion: { in: Stock.categories.values }
+  validates :category, presence: true
   validates :newvalue, presence: true, numericality: true
   validates :message, length: { maximum: 29 }
-  validates :action, inclusion: { in: Manipulation.actions.values }
-  validates :value_type, inclusion: { in: Manipulation.types.values }
+  validates :action, inclusion: { in: [ "add", "subtract" ] }
+  validates :value_type, inclusion: { in: [ "literal", "percent" ] }
 
   def to_json
     {

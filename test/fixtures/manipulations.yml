@@ -16,12 +16,12 @@
 
 one:
   message: MyText
-  ticker: MyString
+  category: MyString
   manipulator: MyString
   racc_username: MyString
 
 two:
   message: MyText
-  ticker: MyString
+  category: MyString
   manipulator: MyString
   racc_username: MyString

@@ -1,10 +1,6 @@
 class RaccCity
   attr_reader :client
 
-  def initialize
-    @client = Faraday.new(url: Rails.application.credentials.racc_city[:base_url])
-  end
-
   def scrape
     client = Faraday.new(url: "#{Rails.application.credentials.racc_city[:base_url]}/ticker/#{api_secret}")
     response = client.get
