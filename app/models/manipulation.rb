@@ -27,8 +27,8 @@ class Manipulation < ApplicationRecord
       category_type: category,
       action: action,
       value_type: "literal",
-      newvalue: newvalue,
-    }
+      newvalue: newvalue
+  }.to_json
   end
 
   class << self

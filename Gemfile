@@ -53,7 +53,7 @@ group :development, :test do
   gem "capistrano", "3.11.2", require: false
   gem "capistrano-bundler", "~> 1.6", require: false
   gem "capistrano-rails", "1.4.0", require: false
-  gem 'capistrano-solid_queue', require: false
+  gem "capistrano-solid_queue", require: false
   gem "ed25519", "~> 1.3"
   gem "bcrypt_pbkdf", "~> 1.1"
 end
