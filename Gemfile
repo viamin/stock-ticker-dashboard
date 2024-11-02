@@ -50,9 +50,10 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
-  gem "capistrano", "3.11.2"
-  gem "capistrano-bundler", "~> 1.6"
-  gem "capistrano-rails", "1.4.0"
+  gem "capistrano", "3.11.2", require: false
+  gem "capistrano-bundler", "~> 1.6", require: false
+  gem "capistrano-rails", "1.4.0", require: false
+  gem 'capistrano-solid_queue', require: false
   gem "ed25519", "~> 1.3"
   gem "bcrypt_pbkdf", "~> 1.1"
 end
@@ -82,3 +83,7 @@ gem "friendly_id" # https://github.com/norman/friendly_id
 gem "groupdate" # https://github.com/ankane/groupdate
 
 gem "faraday"
+
+gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue
+
+gem "mission_control-jobs", "~> 0.3.3"
