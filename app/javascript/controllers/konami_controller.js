@@ -28,6 +28,6 @@ export default class extends Controller {
   }
 
   redirect() {
-    window.location.href = "/manipulations/new";
+    Turbo.visit("/manipulations/new", { frame: "_top" });
   }
 }
