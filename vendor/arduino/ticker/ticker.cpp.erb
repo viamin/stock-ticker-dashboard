@@ -991,11 +991,25 @@ void showticker()
 void loop()
 {
 
-  <% if @insider_text %>
+  <% if @manipulation %>
+
     showcountdown();
     showstarfield();
-    showinsider();
+
+    <% if @insider_text %>
+      showinsider();
+    <% end %>
+
+    // loop this multiple times to make sure the manipulation methods don't repeat
+    // before another call is made to update
     showticker();
+    showticker();
+    showticker();
+    showticker();
+    showticker();
+    showticker();
+    // TODO: measure how long it takes a full ticker message to display
+
   <% else %>
     showticker();
   <% end %>

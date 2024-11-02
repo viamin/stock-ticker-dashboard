@@ -7,7 +7,7 @@ export default class extends Controller {
     this.konamiIndex = 0;
     this.handleKeydown = this.handleKeydown.bind(this);
     window.addEventListener('keydown', this.handleKeydown);
-    console.log("Konami controller connected");
+    // console.log("Konami controller connected");
   }
 
   disconnect() {
@@ -15,7 +15,7 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
-    console.log(event.keyCode);
+    // console.log(event.keyCode);
     if (event.keyCode === this.konamiCode[this.konamiIndex]) {
       this.konamiIndex++;
       if (this.konamiIndex === this.konamiCode.length) {
