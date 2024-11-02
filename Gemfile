@@ -86,4 +86,4 @@ gem "faraday"
 
 gem "solid_queue", "~> 1.0" # https://github.com/rails/solid_queue
 
-gem "mission_control-jobs", "~> 0.3.3"
+gem "mission_control-jobs", "~> 0.3.3" # https://github.com/rails/mission_control-jobs

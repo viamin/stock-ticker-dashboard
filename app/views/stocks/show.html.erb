@@ -3,5 +3,7 @@
 <%= turbo_frame_tag "stock-data", class: "w-full" do %>
   <h1 class="text-2xl font-bold"><%= @stock.name %> (<%= @stock.ticker %>)</h1>
   <h2 class="text-xl font-semibold"><%= @stock.latest_price.to_s %></h2>
-  <%= line_chart @chart_data, width: "800px", height: "500px", min: @chart_min, max: @chart_max, curve: false, points: false, prefix: "$", round: 2, zeros: true %>
+  <%= line_chart @chart_data, width: "100%", min: @chart_min, max: @chart_max, curve: false, points: false, prefix: "$", round: 2, zeros: true %>
 <% end %>
+
+<%= image_tag "konami-logo-png-transparent.png", size: "86x16", class: "bottom-pin" %>
