@@ -15,7 +15,7 @@
 #
 class Manipulation < ApplicationRecord
   validates :category, presence: true
-  validates :newvalue, numericality: { greater_than: 0}
+  validates :newvalue, numericality: { greater_than: 0 }
   validates :message, length: { maximum: 29 }, format: { with: /\A[[:ascii:]]\z/, message: "only allows ASCII characters" }
   validates :action, inclusion: { in: [ "add", "subtract" ] }
   # validates :value_type, inclusion: { in: [ "literal", "percent" ] }
