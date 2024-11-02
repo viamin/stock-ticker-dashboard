@@ -3,10 +3,12 @@ class ManipulationsController < ApplicationController
   end
 
   def new
+    @stocks = Stock.all
     @manipulation = Manipulation.new
   end
 
   def create
+    @stocks = Stock.all
     @manipulation = Manipulation.new(manipulation_params)
 
     if @manipulation.save
