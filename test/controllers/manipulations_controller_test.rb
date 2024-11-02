@@ -1,8 +1,8 @@
 require "test_helper"
 
-class ManipulationControllerTest < ActionDispatch::IntegrationTest
+class ManipulationsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
-    get manipulation_index_url
+    get manipulations_url
     assert_response :success
   end
 
@@ -12,7 +12,7 @@ class ManipulationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get create" do
-    post manipulation_index_url
+    post manipulations_url
     assert_response :success
   end
 

@@ -1,0 +1,31 @@
+<div class="w-full max-w-xs">
+  <%= form_for @manipulation, html: { class: "bg-white rounded px-8 pt-6 pb-8 mb-4" } do |f| %>
+    <div class="mb-4">
+      <%= f.label :category, "Trash Category", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= f.select :category, options_for_select(Stock.categories), class: "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" %>
+      <p class="text-gray-600 text-xs italic mt-2">Change will be applied to all trash stocks in the category</p>
+    </div>
+    <div class="mb-4">
+      <%= f.label :action, "Manipulation", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= f.select :action, options_for_select(Manipulation.actions), class: "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" %>
+    </div>
+    <div class="mb-4">
+      <%= f.label :newvalue, "Amount", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= f.text_field :newvalue, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
+    </div>
+    <div data-controller="character-counter" class="mb-4">
+      <%= f.label :message, "Message", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= f.text_field :message, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2", data: { target: "character-counter.input", action: "input->character-counter#updateCounter" }, maxlength: "29" %>
+      <p class="text-gray-600 text-xs italic mb-2" data-target="character-counter.counter"></p>
+      <p class="text-gray-600 text-xs italic">Message to display on the trash ticker</p>
+    </div>
+    <div class="mb-4">
+      <%= f.label :racc_username, "RaccCity Username", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= f.text_field :racc_username, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
+      <p class="text-gray-600 text-xs italic">If you want credit for this manipulation</p>
+    </div>
+    <div class="flex items-center justify-between">
+      <%= f.submit "Manipulate", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+    </div>
+  <% end %>
+</div>

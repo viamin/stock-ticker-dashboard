@@ -64,6 +64,8 @@ group :development do
   gem "annotate" # https://github.com/ctran/annotate_models
 
   # gem "kamal", "~> 2.2", require: false # https://github.com/basecamp/kamal
+
+  gem "erb_lint", require: false
 end
 
 group :test do

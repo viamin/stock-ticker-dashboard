@@ -50,6 +50,23 @@ class Stock < ApplicationRecord
   end
 
   class << self
+    def categories
+      {
+        "Wet" => "WET",
+        "Miscellaneous" => "MISC",
+        "Shiny" => "SHINY",
+        "False Hope" => "FALSE HOPE",
+        "Glass" => "GLASS",
+        "Carbon Dated" => "CARBON DATED",
+        "Paper" => "PAPER",
+        "Unicorn Tears" => "UNICORN TEARS",
+        "Mushrooms" => "MUSHROOMS",
+        "Landfill Futures" => "LANDFILL FUTURES",
+        "Future Dreams" => "FUTURE DREAMS",
+        "Organic" => "ORGANIC"
+      }
+    end
+
     def full_ticker(display: :web)
       all.map { |s| s.to_s(display: display) }.join("  ")
     end
