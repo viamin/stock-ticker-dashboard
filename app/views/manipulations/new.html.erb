@@ -1,5 +1,15 @@
 <div class="w-full max-w-xs">
-  <%= form_for @manipulation, html: { class: "bg-white rounded px-8 pt-6 pb-8 mb-4" } do |f| %>
+  <%= form_for @manipulation, html: { class: "bg-white rounded px-8 pt-6 pb-8 mb-4" }, data: {turbo: false} do |f| %>
+    <% if @manipulation.errors.any? %>
+      <div class="mb-4">
+        <h2 class="text-red-500 text-sm font-bold mb-2">Errors:</h2>
+        <ul class="list-disc list-inside text-red-500 text-xs">
+          <% @manipulation.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     <div class="mb-4">
       <%= f.label :category, "Trash Category", class: "block text-gray-700 text-sm font-bold mb-2" %>
       <%= f.select :category, options_for_select(Stock.categories), class: "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" %>
