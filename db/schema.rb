@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_02_233709) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_05_060441) do
   create_table "manipulations", force: :cascade do |t|
     t.text "message"
     t.string "category"
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_233709) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.string "category"
+    t.boolean "active", default: true, null: false
     t.index ["slug"], name: "index_stocks_on_slug", unique: true
   end
 

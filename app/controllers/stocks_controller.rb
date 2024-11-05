@@ -1,10 +1,10 @@
 class StocksController < ApplicationController
   def index
-    @stocks = Stock.all.with_prices
+    @stocks = Stock.active.with_prices
   end
 
   def show
-    @stocks = Stock.all
+    @stocks = Stock.active
     @stock = @stocks.find { |s| s.ticker == params[:id] } || @stocks.sample
     @chart_data = @stock.prices.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
     chart_values = @chart_data.values

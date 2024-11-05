@@ -12,14 +12,6 @@ class RaccCityTest < ActiveSupport::TestCase
     end
   end
 
-  # test "initializes with Faraday client" do
-  #   Rails.application.credentials.stub :racc_city, @mock_credentials do
-  #     scraper = RaccCity.new
-  #     assert_instance_of Faraday::Connection, scraper.client
-  #     assert_equal @mock_credentials[:endpoint].chomp("/"), scraper.client.url_prefix.to_s.chomp("/")
-  #   end
-  # end
-
   test "scrape makes request to configured endpoint" do
     skip "not working"
     mock_client = Object.new
@@ -40,20 +32,4 @@ class RaccCityTest < ActiveSupport::TestCase
       end
     end
   end
-
-
-  # test "scrape handles JSON parse errors" do
-  #   mock_client = Object.new
-  #   def mock_client.get(*)
-  #     Faraday::Response.new(status: 200, body: "invalid json")
-  #   end
-
-  #   Rails.application.credentials.stub :racc_city, @mock_credentials do
-  #     @scraper.stub :client, mock_client do
-  #       assert_raises JSON::ParserError do
-  #         @scraper.scrape
-  #       end
-  #     end
-  #   end
-  # end
 end

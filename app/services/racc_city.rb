@@ -7,9 +7,22 @@ class RaccCity
     doc = parse_json(response.body)
     doc.each do |stock_json|
       Stock.find_or_create_by!(ticker: stock_json["symbol"], name: stock_json["companyname"])
-      stock = Stock.find_by(ticker: stock_json["symbol"], name: stock_json["companyname"])
+      stock = Stock.find_by(ticker: stock_json["symbol"])
+      stock.update(active: true)
       stock.prices.create(cents: (stock_json["latestprice"] * 100).to_i, date: Time.current)
     end
+    cleanup(doc)
+  end
+
+  def cleanup(doc_hash)
+    current_tickers = doc_hash.map { |stock_json| stock_json["symbol"] }
+    active_stocks = Stock.active.pluck(:ticker)
+    inactive_tickers = active_stocks - current_tickers
+    Stock.where(ticker: inactive_tickers).update_all(active: false)
+  end
+
+  def purge
+    Price.where(cents: ..0).delete_all
   end
 
   def manipulate(manipulation)

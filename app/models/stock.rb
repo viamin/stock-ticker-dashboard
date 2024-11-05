@@ -21,6 +21,7 @@ class Stock < ApplicationRecord
 
   has_many :prices, dependent: :destroy
 
+  scope :active, -> { where(active: true) }
   scope :with_prices, -> { includes(:prices) }
 
   broadcasts_refreshes
