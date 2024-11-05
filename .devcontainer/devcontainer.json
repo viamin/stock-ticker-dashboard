@@ -34,7 +34,8 @@
       },
       "extensions": [
         "moozzyk.Arduino",
-        "heyimfuzz.banner-comments"
+        "heyimfuzz.banner-comments",
+        "ms-vscode.cpptools-extension-pack"
       ]
     }
   },
