@@ -11,5 +11,20 @@ class StocksController < ApplicationController
     padding = (chart_values.max - chart_values.min) * 0.1
     @chart_min = (chart_values.min - padding).floor
     @chart_max = (chart_values.max + padding).ceil
+
+    @previous_stock = previous_stock(@stock)
+    @next_stock = next_stock(@stock)
+  end
+
+  private
+
+  def previous_stock(current_stock)
+    index = @stocks.index(current_stock)
+    index && index > 0 ? @stocks[index - 1] : @stocks.last
+  end
+
+  def next_stock(current_stock)
+    index = @stocks.index(current_stock)
+    index && index < @stocks.size - 1 ? @stocks[index + 1] : @stocks.first
   end
 end
