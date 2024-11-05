@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  resources :stocks, only: :show
+  resources :stocks, only: :show do
+    collection do
+      get "search"
+    end
+  end
   resources :manipulations, only: %i[index new create show]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

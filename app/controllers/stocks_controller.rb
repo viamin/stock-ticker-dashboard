@@ -16,6 +16,16 @@ class StocksController < ApplicationController
     @next_stock = next_stock(@stock)
   end
 
+  def search
+    ticker = params[:ticker].upcase
+    stock = Stock.find_by(ticker: ticker)
+    if stock
+      redirect_to stock_path(stock.ticker)
+    else
+      redirect_to root_path, alert: "Stock not found"
+    end
+  end
+
   private
 
   def previous_stock(current_stock)
