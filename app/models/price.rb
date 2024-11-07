@@ -20,7 +20,7 @@
 class Price < ApplicationRecord
   belongs_to :stock
 
-  default_scope { order(date: :desc).limit(100) }
+  default_scope { order(date: :desc) }
 
   scope :weekly, -> { where(date: 7.days.ago..) }
 
