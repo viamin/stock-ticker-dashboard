@@ -12,7 +12,8 @@ class ManipulationsController < ApplicationController
     @manipulation = Manipulation.new(manipulation_params)
 
     if @manipulation.save
-      RaccManipulatorJob.perform_later(@manipulation.id)
+      # RaccManipulatorJob.perform_later(@manipulation.id)
+      RaccCity.new.manipulate(@manipulation)
       TickerUploadJob.perform_later(@manipulation.id)
       redirect_to root_path
     else

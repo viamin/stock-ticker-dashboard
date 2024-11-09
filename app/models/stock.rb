@@ -3,6 +3,7 @@
 # Table name: stocks
 #
 #  id          :integer          not null, primary key
+#  active      :boolean          default(TRUE), not null
 #  category    :string
 #  description :text
 #  name        :text
