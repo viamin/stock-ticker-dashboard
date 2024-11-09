@@ -2,8 +2,14 @@
 
 // Change this to be at least as long as your pixel string (too long will work fine, just be a little slower)
 
+unsigned long starfieldInterval;
+unsigned long loopCounter = 0;
+const int buttonPin = 2; // Define the pin for the button
+int buttonValue = 1;
+
 // #define PIXELS 96*4  // Number of pixels in the string.
 #define PIXELS 40
+#define DISPLAY_HEIGHT 7
 
 // These values depend on which pins your 8 strings are connected to and what board you are using
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
@@ -416,8 +422,8 @@ void setup()
   ledsetup();
 
   // Define the pin for the button
-  const int buttonPin = 2; // TODO: Change this to the actual pin number
-  int buttonValue = 0; // Variable to keep track of the button value
+  // const int buttonPin = 2; // TODO: Change this to the actual pin number
+  // int buttonValue = 0; // Variable to keep track of the button value
 
   // Initialize the button pin as an input with an internal pull-up resistor
   pinMode(buttonPin, INPUT_PULLUP);
@@ -426,7 +432,7 @@ void setup()
   randomSeed(analogRead(0));
 
   // Set the initial starfield interval
-  starfieldInterval = random(5 * 60 * 1000 / 10, 10 * 60 * 1000 / 10); // Convert to loop iterations
+  starfieldInterval = random(1 * 60 * 1000 / 10, 2 * 60 * 1000 / 10); // Convert to loop iterations
 
 }
 
@@ -479,11 +485,11 @@ void showstarfield()
   for (unsigned int i = 0; i < 300; i++)
   {
 
-    unsigned int r = random(PIXELS * 8); // Random slow, so grab one big number and we will break it down.
+    unsigned int r = random(PIXELS * 16); // Random slow, so grab one big number and we will break it down.
 
     unsigned int x = r / 8;
     uint8_t y = r & 0x07;       // We use 7 rows
-    uint8_t bitmask = (2 << y); // Start at bit #1 since we enver use the bottom bit
+    uint8_t bitmask = (2 << y); // Start at bit #1 since we never use the bottom bit
 
     cli();
 
@@ -550,10 +556,17 @@ void showticker(const char *ticker_text)
   }
 }
 
+//   ####   ####  #####   ####  #      #      ###### #####
+//  #      #    # #    # #    # #      #      #      #    #
+//   ####  #      #    # #    # #      #      #####  #    #
+//       # #      #####  #    # #      #      #      #####
+//  #    # #    # #   #  #    # #      #      #      #   #
+//   ####   ####  #    #  ####  ###### ###### ###### #    #
+
 void showscroller(const char *scroller_text)
 {
   const char *m = scroller_text;
-  char line[DISPLAY_WIDTH / (FONT_WIDTH + INTERCHAR_SPACE) + 1]; // Buffer for one line of text
+  char line[PIXELS / (FONT_WIDTH + INTERCHAR_SPACE) + 1]; // Buffer for one line of text
   uint8_t lineIndex = 0;
 
   while (*m)
@@ -591,42 +604,45 @@ void showscroller(const char *scroller_text)
 void loop()
 {
   // Check the button state
-  if (digitalRead(buttonPin) == LOW) {
-    // Debounce the button press
-    delay(50);
-    if (digitalRead(buttonPin) == LOW) {
-      // Increment the button value
-      buttonValue++;
-      // Wait for the button to be released
-      while (digitalRead(buttonPin) == LOW) {
-        delay(10);
-      }
-    }
-  }
+  // if (digitalRead(buttonPin) == LOW) {
+  //   // Debounce the button press
+  //   delay(50);
+  //   if (digitalRead(buttonPin) == LOW) {
+  //     // Increment the button value
+  //     buttonValue++;
+  //     // Wait for the button to be released
+  //     while (digitalRead(buttonPin) == LOW) {
+  //       delay(10);
+  //     }
+  //   }
+  // }
 
-  // Change behavior based on the button value
-  switch (buttonValue % 3) { // Use modulo to cycle through different behaviors
-    case 0:
-      showscroller("NY Trash Exchange")
-      break;
-    case 1:
-      showscroller("NYTE Lounge")
-      break;
-    case 2:
-      showticker("Anti-Trashitalist Lounge");
-      break;
-  }
+  // // Change behavior based on the button value
+  // switch (buttonValue % 3) { // Use modulo to cycle through different behaviors
+  //   case 0:
+  //     showscroller("NY Trash Exchange");
+  //     break;
+  //   case 1:
+  //     showscroller("NYTE Lounge");
+  //     break;
+  //   case 2:
+  //     showticker("Anti-Trashitalist Lounge");
+  //     break;
+  // }
 
-  // Increment the loop counter
-  loopCounter++;
+  // // Increment the loop counter
+  // loopCounter++;
 
-  // Check if it's time to display the starfield
-  if (loopCounter >= starfieldInterval) {
-    showstarfield();
-    // Reset the loop counter and set a new random interval
-    loopCounter = 0;
-    starfieldInterval = random(5 * 60 * 1000 / 10, 10 * 60 * 1000 / 10); // Convert to loop iterations
-  }
+  // // Check if it's time to display the starfield
+  // if (loopCounter >= starfieldInterval) {
+  //   showstarfield();
+  //   // Reset the loop counter and set a new random interval
+  //   loopCounter = 0;
+  //   // starfieldInterval = random(5 * 60 * 1000 / 10, 10 * 60 * 1000 / 10); // Convert to loop iterations
+  //   starfieldInterval = random(1 * 60 * 1000 / 10, 2 * 60 * 1000 / 10); // Convert to loop iterations
+  // }
+
+  showstarfield();
 
   return;
 }
