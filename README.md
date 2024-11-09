@@ -12,6 +12,20 @@ The site is hosted on a raspberry pi 4 with a static IP address. To deploy:
 bundle exec cap production deploy
 ```
 
+### Open ngrok tunnel
+
+First log into ngrok and get an auth token and fancy url. Then run:
+
+```
+ngrok config add-authtoken <your-token>
+```
+
+Then open a tmux session and run:
+
+```
+ngrok http --url=ethical-lucky-raptor.ngrok-free.app 443
+```
+
 ## Compile arduino code on the raspberry pi (this example is for arduino uno)
 
 ```

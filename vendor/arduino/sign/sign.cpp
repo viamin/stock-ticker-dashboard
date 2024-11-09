@@ -4,12 +4,16 @@
 
 unsigned long starfieldInterval;
 unsigned long loopCounter = 0;
-const int buttonPin = 2; // Define the pin for the button
+const int buttonPin = 9; // Define the pin for the button
 int buttonValue = 1;
 
 // #define PIXELS 96*4  // Number of pixels in the string.
 #define PIXELS 40
 #define DISPLAY_HEIGHT 7
+
+#define COLOR_R 0x10
+#define COLOR_G 0x00
+#define COLOR_B 0x00
 
 // These values depend on which pins your 8 strings are connected to and what board you are using
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
@@ -345,9 +349,8 @@ const uint8_t Font5x7[] PROGMEM = {
 // TODO: Also could pad the begining of the font table to aovid the offset subtraction at the cost of 20*8 bytes of progmem
 // TODO: Could pad all chars out to 8 bytes wide to turn the the multiply by FONT_WIDTH into a shift
 
-static inline void sendChar(uint8_t c, uint8_t skip, uint8_t r, uint8_t g, uint8_t b)
+static inline void sendChar(uint8_t c, uint8_t skip, uint8_t displayRow, uint8_t r, uint8_t g, uint8_t b)
 {
-
   const uint8_t *charbase = Font5x7 + ((c - ' ') * FONT_WIDTH);
 
   uint8_t col = FONT_WIDTH;
@@ -360,12 +363,11 @@ static inline void sendChar(uint8_t c, uint8_t skip, uint8_t r, uint8_t g, uint8
 
   while (col--)
   {
-    sendRowRGB(pgm_read_byte_near(charbase++), r, g, b);
+    sendRowRGB(pgm_read_byte_near(charbase++) & displayRow, r, g, b);
   }
 
-  // TODO: FLexible interchar spacing
-
-  sendRowRGB(0, r, g, b); // Interchar space
+  // Interchar space
+  sendRowRGB(0, r, g, b);
 }
 
 //                               #####
@@ -379,17 +381,22 @@ static inline void sendChar(uint8_t c, uint8_t skip, uint8_t r, uint8_t g, uint8
 // Show the passed string. The last letter of the string will be in the rightmost pixels of the display.
 // Skip is how many cols of the 1st char to skip for smooth scrolling
 
-static inline void sendString(const char *s, uint8_t skip, const uint8_t r, const uint8_t g, const uint8_t b)
+static inline void sendString(const char *s, int8_t yPos, const uint8_t r, const uint8_t g, const uint8_t b)
 {
+  if (yPos < -DISPLAY_HEIGHT || yPos > DISPLAY_HEIGHT) return; // Out of display bounds
+
+  uint8_t displayRow = 0;
+  for (int8_t row = 0; row < DISPLAY_HEIGHT; row++) {
+    if (row - yPos >= 0 && row - yPos < DISPLAY_HEIGHT) {
+      displayRow |= (1 << (row - yPos));
+    }
+  }
 
   unsigned int l = PIXELS / (FONT_WIDTH + INTERCHAR_SPACE);
+  const char* current = s;
 
-  sendChar(*s, skip, r, g, b); // First char is special case becuase it can be stepped for smooth scrolling
-
-  while (*(++s) && l--)
-  {
-
-    sendChar(*s, 0, r, g, b);
+  while (*current && l--) {
+    sendChar(*current++, 0, displayRow, r, g, b);
   }
 }
 
@@ -421,12 +428,12 @@ void setup()
 
   ledsetup();
 
-  // Define the pin for the button
-  // const int buttonPin = 2; // TODO: Change this to the actual pin number
-  // int buttonValue = 0; // Variable to keep track of the button value
-
-  // Initialize the button pin as an input with an internal pull-up resistor
+  // Initialize button with internal pullup
   pinMode(buttonPin, INPUT_PULLUP);
+  // Initialize LED pin
+  pinMode(13, OUTPUT); // Built-in LED
+  digitalWrite(13, LOW); // Make sure LED starts OFF
+  buttonValue = 0;
 
   // Initialize random seed
   randomSeed(analogRead(0));
@@ -434,8 +441,52 @@ void setup()
   // Set the initial starfield interval
   starfieldInterval = random(1 * 60 * 1000 / 10, 2 * 60 * 1000 / 10); // Convert to loop iterations
 
+  // Run the LED test sequence
+  testStrips();
 }
 
+//  #######                      #####
+//     #    ######  ####  ##### #     # ##### #####  # #####   ####
+//     #    #      #        #   #         #   #    # # #    # #
+//     #    #####   ####    #    #####    #   #    # # #    #  ####
+//     #    #           #   #         #   #   #####  # #####       #
+//     #    #      #    #   #   #     #   #   #   #  # #      #    #
+//     #    ######  ####    #    #####    #   #    # # #       ####
+
+void testStrips() {
+  // Test each row individually
+  for (uint8_t row = 0; row < DISPLAY_HEIGHT; row++) {
+    uint8_t rowMask = (1 << row);
+
+    // Light up the entire row
+    cli();
+    for (uint8_t i = 0; i < PIXELS; i++) {
+      sendRowRGB(rowMask, COLOR_R, COLOR_G, COLOR_B);
+    }
+    sei();
+    show();
+    delay(300); // Keep lit for 300ms
+
+    // Clear the row
+    cli();
+    for (uint8_t i = 0; i < PIXELS; i++) {
+      sendRowRGB(0, 0, 0, 0);
+    }
+    sei();
+    show();
+    delay(100); // Wait 100ms before next row
+  }
+
+  // Final full display test
+  cli();
+  for (uint8_t i = 0; i < PIXELS; i++) {
+    sendRowRGB(0xFF, COLOR_R, COLOR_G, COLOR_B);
+  }
+  sei();
+  show();
+  delay(500);
+  clear();
+}
 
 //   ####    ##   #    # #    #   ##
 //  #    #  #  #  ##  ## ##  ##  #  #
@@ -523,10 +574,6 @@ void showstarfield()
 //     #    # #    # #   #  #      #   #
 //     #    #  ####  #    # ###### #    #
 
-#define COLOR_R 0x10
-#define COLOR_G 0x00
-#define COLOR_B 0x00
-
 void showticker(const char *ticker_text)
 {
 
@@ -580,7 +627,7 @@ void showscroller(const char *scroller_text)
     line[lineIndex] = '\0'; // Null-terminate the line
 
     // Scroll the line up into view
-    for (uint8_t step = 0; step < DISPLAY_HEIGHT; step++)
+    for (uint8_t step = DISPLAY_HEIGHT; step > 0; step--)
     {
       cli();
       sendString(line, step, COLOR_R, COLOR_G, COLOR_B);
@@ -588,8 +635,34 @@ void showscroller(const char *scroller_text)
       delay(100); // Adjust the delay for smooth scrolling
     }
 
+    // Display the line in final position
+    cli();
+    sendString(line, 0, COLOR_R, COLOR_G, COLOR_B);
+    sei();
+
     // Wait 5 seconds before scrolling the next line into view
-    delay(5000);
+    unsigned long startTime = millis();
+    while (millis() - startTime < 5000) {
+      if (digitalRead(buttonPin) == LOW) {
+        digitalWrite(13, HIGH);
+        delay(50); // debounce
+        if (digitalRead(buttonPin) == LOW) {
+          buttonValue++;
+          digitalWrite(13, LOW);
+          return;
+        }
+      }
+      delay(10);
+    }
+
+    // Scroll the line up and out
+    for (int8_t step = 0; step >= -DISPLAY_HEIGHT; step--)
+    {
+      cli();
+      sendString(line, step, COLOR_R, COLOR_G, COLOR_B);
+      sei();
+      delay(100);
+    }
   }
 }
 
@@ -603,46 +676,52 @@ void showscroller(const char *scroller_text)
 
 void loop()
 {
-  // Check the button state
-  // if (digitalRead(buttonPin) == LOW) {
-  //   // Debounce the button press
-  //   delay(50);
-  //   if (digitalRead(buttonPin) == LOW) {
-  //     // Increment the button value
-  //     buttonValue++;
-  //     // Wait for the button to be released
-  //     while (digitalRead(buttonPin) == LOW) {
-  //       delay(10);
-  //     }
-  //   }
-  // }
+  // Simple button test at the start of loop
+  if (digitalRead(buttonPin) == LOW) {
+    // Button is pressed
+    digitalWrite(13, HIGH);
+    delay(50); // debounce
 
-  // // Change behavior based on the button value
-  // switch (buttonValue % 3) { // Use modulo to cycle through different behaviors
-  //   case 0:
-  //     showscroller("NY Trash Exchange");
-  //     break;
-  //   case 1:
-  //     showscroller("NYTE Lounge");
-  //     break;
-  //   case 2:
-  //     showticker("Anti-Trashitalist Lounge");
-  //     break;
-  // }
+    if (digitalRead(buttonPin) == LOW) {
+      buttonValue++;
+      // Wait for button release
+      while(digitalRead(buttonPin) == LOW) {
+        delay(10);
+      }
+    }
+  } else {
+    digitalWrite(13, LOW);
+  }
 
-  // // Increment the loop counter
-  // loopCounter++;
+  // Change behavior based on the button value
+  switch (buttonValue % 4) {
+    case 0:
+      showscroller("NY\nTRASH\nEXCH");
+      break;
+    case 1:
+      showscroller("NYTE\nLNGE");
+      break;
+    case 2:
+      showscroller("ANTI\nTRASH\nLNGE");
+      break;
+    case 3:
+      testStrips();
+      break;
+  }
 
-  // // Check if it's time to display the starfield
-  // if (loopCounter >= starfieldInterval) {
-  //   showstarfield();
-  //   // Reset the loop counter and set a new random interval
-  //   loopCounter = 0;
-  //   // starfieldInterval = random(5 * 60 * 1000 / 10, 10 * 60 * 1000 / 10); // Convert to loop iterations
-  //   starfieldInterval = random(1 * 60 * 1000 / 10, 2 * 60 * 1000 / 10); // Convert to loop iterations
-  // }
+  // Increment the loop counter
+  loopCounter++;
 
-  showstarfield();
+  // Check if it's time to display the starfield
+  if (loopCounter >= starfieldInterval) {
+    showstarfield();
+    // Reset the loop counter and set a new random interval
+    loopCounter = 0;
+    // starfieldInterval = random(5 * 60 * 1000 / 10, 10 * 60 * 1000 / 10); // Convert to loop iterations
+    starfieldInterval = random(1 * 60 * 1000 / 10, 2 * 60 * 1000 / 10); // Convert to loop iterations
+  }
+
+  // showstarfield();
 
   return;
 }
