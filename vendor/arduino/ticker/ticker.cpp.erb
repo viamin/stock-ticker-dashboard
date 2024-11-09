@@ -597,8 +597,52 @@ void ledsetup()
 
 void setup()
 {
-
   ledsetup();
+
+  testStrips();
+}
+
+//  #######                      #####
+//     #    ######  ####  ##### #     # ##### #####  # #####   ####
+//     #    #      #        #   #         #   #    # # #    # #
+//     #    #####   ####    #    #####    #   #    # # #    #  ####
+//     #    #           #   #         #   #   #####  # #####       #
+//     #    #      #    #   #   #     #   #   #   #  # #      #    #
+//     #    ######  ####    #    #####    #   #    # # #       ####
+
+void testStrips() {
+  // Test each row individually
+  for (uint8_t row = 0; row < DISPLAY_HEIGHT; row++) {
+    uint8_t rowMask = (1 << row);
+
+    // Light up the entire row
+    cli();
+    for (uint8_t i = 0; i < PIXELS; i++) {
+      sendRowRGB(rowMask, COLOR_R, COLOR_G, COLOR_B);
+    }
+    sei();
+    show();
+    delay(300); // Keep lit for 300ms
+
+    // Clear the row
+    cli();
+    for (uint8_t i = 0; i < PIXELS; i++) {
+      sendRowRGB(0, 0, 0, 0);
+    }
+    sei();
+    show();
+    delay(100); // Wait 100ms before next row
+  }
+
+  // Final full display test
+  cli();
+  for (uint8_t i = 0; i < PIXELS; i++) {
+    sendRowRGB(0xFF, COLOR_R, COLOR_G, COLOR_B);
+  }
+  sei();
+  show();
+  delay(500);
+  clear();
 }
 
 
