@@ -8,7 +8,7 @@ class Arduino
     ticker_blue: "00" # hexadecimal
   )
     @manipulation = manipulation
-    @insider_text = insider_text.upcase.center(29)
+    @insider_text = insider_text&.upcase&.center(29)
     @scroll_delay = scroll_delay
     @ticker_red = ticker_red
     @ticker_green = ticker_green
