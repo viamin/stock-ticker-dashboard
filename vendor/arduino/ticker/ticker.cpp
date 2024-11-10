@@ -600,41 +600,41 @@ void ledsetup()
 
 void testStrips()
 {
+  // Ensure pins are configured
+  ledsetup();
+
   // Test each row individually
   for (uint8_t row = 0; row < DISPLAY_HEIGHT; row++)
   {
     uint8_t rowMask = (1 << row);
 
-    // Light up the entire row
-    cli();
-    for (uint8_t i = 0; i < PIXELS; i++)
-    {
-      sendRowRGB(rowMask, COLOR_R, COLOR_G, COLOR_B);
-    }
-    sei();
-    show();
-    delay(300); // Keep lit for 300ms
+    // Clear display first
+    clear();
+    delay(50);
 
-    // Clear the row
+    // Light up the entire row with  red
     cli();
     for (uint8_t i = 0; i < PIXELS; i++)
     {
-      sendRowRGB(0, 0, 0, 0);
+      sendRowRGB(rowMask, 0x10, 0x00, 0x00); // Full red
     }
     sei();
     show();
-    delay(100); // Wait 100ms before next row
+    delay(500);
   }
 
-  // Final full display test
+  // Final full display test - all red
+  clear();
+  delay(50);
+
   cli();
   for (uint8_t i = 0; i < PIXELS; i++)
   {
-    sendRowRGB(0xFF, COLOR_R, COLOR_G, COLOR_B);
+    sendRowRGB(0xFF, 0x10, 0x00, 0x00); // Full red on all rows
   }
   sei();
   show();
-  delay(500);
+  delay(1000);
   clear();
 }
 
@@ -649,7 +649,7 @@ void setup()
 {
   ledsetup();
 
-  testStrips();
+  // testStrips();
 }
 
 //   ####    ##   #    # #    #   ##
@@ -891,8 +891,6 @@ void showinvaderwipe(uint8_t which, const char *pointsStr, uint8_t r, uint8_t g,
   delay(1500);
 }
 
-
-
 //  # #    # #    #   ##   #####  ###### #####   ####
 //  # ##   # #    #  #  #  #    # #      #    # #
 //  # # #  # #    # #    # #    # #####  #    #  ####
@@ -1037,8 +1035,6 @@ void showticker()
 void loop()
 {
 
-  <% if @manipulation %>
-
     showcountdown();
     showstarfield();
 
@@ -1052,11 +1048,8 @@ void loop()
     showticker();
     showticker();
     showticker();
-    // TODO: measure how long it takes a full ticker message to display
-
-  <% else %>
     showticker();
-  <% end %>
+    // TODO: measure how long it takes a full ticker message to display
 
   // TODO: Actually sample the state of the pullup on unused pins and OR it into the mask so we maintain the state.
   // Must do AFTER the cli().
