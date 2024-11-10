@@ -14,11 +14,7 @@ class ManipulationsController < ApplicationController
     if @manipulation.save
       # RaccManipulatorJob.perform_later(@manipulation.id)
       # TickerUploadJob.perform_later(@manipulation.id)
-      if @manipulation.message.present?
-        Arduino.new(insider_text: @manipulation.message, manipulation: true).update!
-      else
-        Arduino.new.update!
-      end
+      Arduino.new(insider_text: @manipulation.message, manipulation: true).update!
       RaccCity.new.manipulate(@manipulation)
       redirect_to root_path
     else
