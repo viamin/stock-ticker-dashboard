@@ -4,7 +4,9 @@
 
 // #define PIXELS 96*4  // Number of pixels in the string.
 #define PIXELS 274
-
+#define COLOR_R 0x<%= @ticker_red %>
+#define COLOR_G 0x<%= @ticker_green %>
+#define COLOR_B 0x<%= @ticker_blue %>
 // These values depend on which pins your 8 strings are connected to and what board you are using
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
 
@@ -990,10 +992,6 @@ void showinsider()
 //     #    # #      #  #   #      #####
 //     #    # #    # #   #  #      #   #
 //     #    #  ####  #    # ###### #    #
-
-#define COLOR_R 0x<%= @ticker_red %>
-#define COLOR_G 0x<%= @ticker_green %>
-#define COLOR_B 0x<%= @ticker_blue %>
 
 void showticker()
 {
