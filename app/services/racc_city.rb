@@ -26,6 +26,7 @@ class RaccCity
   end
 
   def manipulate(manipulation)
+    client = Faraday.new(url: "#{Rails.application.credentials.racc_city[:base_url]}/manipulate/#{api_secret}")
     client.post(manipulation_url, manipulation.to_json, "Content-Type" => "application/json")
   end
 
