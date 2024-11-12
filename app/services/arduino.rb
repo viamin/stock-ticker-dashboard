@@ -2,8 +2,8 @@ class Arduino
   def initialize(
     manipulation: false,
     insider_text: nil,
-    scroll_delay: 10,
-    ticker_red: "10", # hexadecimal
+    scroll_delay: 30, # higher numbers are slower
+    ticker_red: "05", # hexadecimal
     ticker_green: "00", # hexadecimal
     ticker_blue: "00" # hexadecimal
   )

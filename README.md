@@ -75,3 +75,4 @@ avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:sign
 
 Dashboard ticker font is adapted from https://www.fontspace.com/subway-ticker-font-f5621 with some added glyphs ("⏷" & "⏶")
 Arduino ticker is based on https://github.com/bigjosh/MacroMarquee (see https://wp.josh.com/2016/05/20/huge-scrolling-arduino-led-sign/ for build info)
+sign.cpp font is zxpix_font from https://jared.geek.nz/2014/01/custom-fonts-for-microcontrollers/
