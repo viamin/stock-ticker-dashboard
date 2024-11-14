@@ -53,17 +53,16 @@ class StocksController < ApplicationController
     case column
     when "ticker", "name"
       # Database columns can use ActiveRecord sorting
-      if direction == "desc"
-        @stocks.order(column.to_sym => direction.to_sym)
-      else
-        @stocks.order(column.to_sym)
-      end
+      Stock.active.with_prices.order(column => direction)
     when "latest_price"
-      # Manual sort for calculated latest_price
-      sorted = @stocks.sort_by { |stock| stock.latest_price.cents }
-      direction == "desc" ? sorted.reverse : sorted
+      # Join with prices table and sort by the most recent price
+      Stock.active
+           .with_prices
+           .joins("LEFT JOIN prices ON prices.stock_id = stocks.id")
+           .where("prices.date = (SELECT MAX(date) FROM prices WHERE stock_id = stocks.id)")
+           .order("prices.cents #{direction}")
     else
-      @stocks
+      Stock.active.with_prices
     end
   end
 end
