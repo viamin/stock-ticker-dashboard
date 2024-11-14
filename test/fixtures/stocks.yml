@@ -21,8 +21,10 @@ one:
   name: Apple Inc.
   ticker: AAPL
   description: A computer company
+  slug: aapl
 
 two:
   name: Microsoft
   ticker: MSFT
   description: A software company
+  slug: msft
