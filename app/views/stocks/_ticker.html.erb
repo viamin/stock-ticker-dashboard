@@ -3,7 +3,7 @@
     <div class="hmove">
       <%- stocks.each do |stock| %>
         <div class="hitem">
-          <%= link_to "#{stock.ticker} #{stock.latest_price} #{stock.price_trend_icon}", stock_path(stock.ticker), data: { turbo_frame: "stock-data" }, class: stock.price_trend_icon == "⏶" ? "stock-green" : "stock-red" %>
+          <%= link_to "#{stock.ticker} #{stock.latest_price} #{stock.price_trend_icon}", stock_path(stock.friendly_id), data: { turbo_frame: "stock-data" }, class: stock.price_trend_icon == "⏶" ? "stock-green" : "stock-red" %>
         </div>
       <% end %>
     </div>

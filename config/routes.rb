@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  resources :stocks, only: :show do
+  resources :stocks, only: [ :index, :show ] do
     collection do
       get "search"
     end

@@ -1,0 +1,41 @@
+<main class="container mx-auto mt-28 px-5 flex flex-col items-center" data-controller="navigation">
+  <%= render "ticker", stocks: @stocks %>
+
+  <%= turbo_frame_tag "stock-data", class: "w-full" do %>
+    <div class="w-full max-w-4xl">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to stocks_path(sort: :ticker, direction: sort_direction(:ticker)), class: "group inline-flex items-center gap-2 hover:text-gray-900" do %>
+                Symbol
+                <%= sort_indicator(:ticker) %>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to stocks_path(sort: :name, direction: sort_direction(:name)), class: "group inline-flex items-center gap-2 hover:text-gray-900" do %>
+                Name
+                <%= sort_indicator(:name) %>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to stocks_path(sort: :latest_price, direction: sort_direction(:latest_price)), class: "group inline-flex items-center gap-2 hover:text-gray-900" do %>
+                Latest Price
+                <%= sort_indicator(:latest_price) %>
+              <% end %>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @stocks.each do |stock| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= link_to stock.ticker, stock_path(stock.friendly_id) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= link_to stock.name, stock_path(stock.friendly_id) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= stock.latest_price %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</main>

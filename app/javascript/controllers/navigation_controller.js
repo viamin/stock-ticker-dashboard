@@ -4,6 +4,9 @@ import { Turbo } from "@hotwired/turbo-rails"
 // Connects to data-controller="navigation"
 export default class extends Controller {
   static targets = ["previous", "next"]
+  static values = {
+    indexPath: String
+  }
 
   connect() {
     this.handleKeydown = this.handleKeydown.bind(this)
@@ -19,6 +22,8 @@ export default class extends Controller {
       this.previous()
     } else if (event.key === '.') {
       this.next()
+    } else if (event.key === 'I') {
+      this.index()
     }
   }
 
@@ -34,5 +39,9 @@ export default class extends Controller {
     if (nextLink) {
       Turbo.visit(nextLink.href, { frame: "stock-data" })
     }
+  }
+
+  index() {
+    Turbo.visit(this.indexPathValue, { frame: "stock-data" })
   }
 }

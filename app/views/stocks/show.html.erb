@@ -1,4 +1,4 @@
-<main class="container mx-auto mt-28 px-5 flex flex-col items-center" data-controller="navigation">
+<main class="container mx-auto mt-28 px-5 flex flex-col items-center" data-controller="navigation" data-navigation-index-path-value="<%= stocks_path %>">
   <%= render "ticker", stocks: @stocks %>
 
   <%= turbo_frame_tag "stock-data", class: "w-full" do %>
@@ -17,8 +17,8 @@
     <br />
     <p class="text-sm text-gray-500">Last updated <%= time_ago_in_words(@stock.latest_price.updated_at) %> ago</p>
     <div class="w-full flex justify-between mt-4">
-      <%= link_to "< Previous".html_safe, stock_path(@previous_stock.ticker), class: "btn btn-primary", data: { navigation_target: "previous" } %>
-      <%= link_to "Next >", stock_path(@next_stock.ticker), class: "btn btn-primary", data: { navigation_target: "next" } %>
+      <%= link_to "< Previous".html_safe, stock_path(@previous_stock.friendly_id), class: "btn btn-primary", data: { navigation_target: "previous" } %>
+      <%= link_to "Next >", stock_path(@next_stock.friendly_id), class: "btn btn-primary", data: { navigation_target: "next" } %>
     </div>
     <p class="text-xs text-gray-500 mt-2 desktop-only">Use the <kbd>,</kbd> and <kbd>.</kbd> keys to navigate</p>
   <% end %>
