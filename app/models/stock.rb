@@ -71,7 +71,8 @@ class Stock < ApplicationRecord
     end
 
     def full_ticker(display: :web)
-      all.map { |s| s.to_s(display: display) }.join("  ")
+      ticker_text = all.map { |s| s.to_s(display: display) }.join("  ")
+      display == :web ? ticker_text : ticker_text.prepend(" " * 29)
     end
   end
 end

@@ -29,23 +29,14 @@
             <%= f.label :newvalue, "Amount", class: "block text-gray-700 text-sm font-bold mb-2" %>
             <%= f.text_field :newvalue, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
           </div>
-          <div data-controller="toggle-inputs" class="mb-4">
-            <input type="checkbox" data-action="change->toggle-inputs#toggle" id="toggleCheckbox">
-            <label for="toggleCheckbox">Add a message</label>
 
-            <div data-controller="character-counter" data-toggle-inputs-target="toggleable" class="mb-4 hidden">
-              <%= f.label :message, "Message", class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= f.text_field :message, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2", data: { target: "character-counter.input", action: "input->character-counter#updateCounter" }, maxlength: "29" %>
-              <p class="text-gray-600 text-xs italic mb-2" data-target="character-counter.counter"></p>
-              <p class="text-gray-600 text-xs italic">Message to display on the trash ticker</p>
-            </div>
-
-            <div data-toggle-inputs-target="toggleable" class="mb-4 hidden">
-              <%= f.label :racc_username, "RaccCity Username", class: "block text-gray-700 text-sm font-bold mb-2" %>
-              <%= f.text_field :racc_username, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
-              <p class="text-gray-600 text-xs italic">If you want credit for this manipulation</p>
-            </div>
+          <div data-controller="character-counter" class="mb-4">
+            <%= f.label :message, "Message (optional)", class: "block text-gray-700 text-sm font-bold mb-2" %>
+            <%= f.text_field :message, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2", data: { target: "character-counter.input", action: "input->character-counter#updateCounter" }, maxlength: "29" %>
+            <p class="text-gray-600 text-xs italic mb-2" data-target="character-counter.counter"></p>
+            <p class="text-gray-600 text-xs italic">Message to display on the trash ticker</p>
           </div>
+
           <div class="flex items-center justify-between">
             <%= f.submit "Submit", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
           </div>

@@ -84,3 +84,5 @@ gem "groupdate" # https://github.com/ankane/groupdate
 gem "faraday"
 
 gem "mission_control-jobs", "~> 0.3.3" # https://github.com/rails/mission_control-jobs
+
+gem "sidekiq", "~> 7.3"

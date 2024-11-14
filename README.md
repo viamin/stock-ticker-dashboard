@@ -4,6 +4,14 @@ This is the dashboard for the NY Trash Exchange and Trashholder's Lounge
 
 It is used to scrape prices from the Racc Investment Management project website and display them on a dashboard. It will also update the prices on an arduino LED based ticker, and allow "hackers" to alter the ticker text if they can figure out how.
 
+## Prepare raspberry pi
+
+```
+sudo apt-get update && sudo apt-get install -y sqlite3 tmux redis-server
+sudo systemctl enable redis-server
+redis-cli ping
+```
+
 ## Deployment
 
 The site is hosted on a raspberry pi 4 with a static IP address. To deploy:
