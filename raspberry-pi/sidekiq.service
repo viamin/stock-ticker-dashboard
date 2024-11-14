@@ -1,0 +1,13 @@
+[Unit]
+Description=Sidekiq Background Worker
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/var/www/nyte_ticker/current
+ExecStart=/usr/local/bin/bundle exec sidekiq -e production
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

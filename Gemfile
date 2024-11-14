@@ -53,6 +53,7 @@ group :development, :test do
   gem "capistrano", "3.11.2", require: false
   gem "capistrano-bundler", "~> 1.6", require: false
   gem "capistrano-rails", "1.4.0", require: false
+  gem "capistrano-sidekiq", require: false
   gem "ed25519", "~> 1.3"
   gem "bcrypt_pbkdf", "~> 1.1"
 end
@@ -84,3 +85,5 @@ gem "groupdate" # https://github.com/ankane/groupdate
 gem "faraday"
 
 gem "mission_control-jobs", "~> 0.3.3" # https://github.com/rails/mission_control-jobs
+
+gem "sidekiq", "~> 7.3"

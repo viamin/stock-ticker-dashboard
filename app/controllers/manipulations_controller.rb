@@ -12,10 +12,11 @@ class ManipulationsController < ApplicationController
     @manipulation = Manipulation.new(manipulation_params)
 
     if @manipulation.save
-      # RaccManipulatorJob.perform_later(@manipulation.id)
-      # TickerUploadJob.perform_later(@manipulation.id)
-      Arduino.new(insider_text: @manipulation.message, manipulation: true).update!
-      RaccCity.new.manipulate(@manipulation)
+      RaccManipulatorJob.perform_later(@manipulation.id)
+      TickerUploadJob.perform_later(@manipulation.id)
+      # Arduino.new(insider_text: @manipulation.message, manipulation: true).update!
+      # RaccCity.new.manipulate(@manipulation)
+      TickerUploadJob.perform_in(3.minutes) # leave off manipulation to only have ticker text (no manipulations)
       redirect_to root_path
     else
       render :new
