@@ -16,11 +16,17 @@ class Arduino
   end
 
   def update!
+    detect_board_type
     generate_template
     compile
     link
     hex
     upload
+  end
+
+  def detect_board_type
+    port_data = `arduino-cli board list`
+    @board_type = port_data.match(/arduino:avr:(\w+)/).try(:[], 1) || "uno"
   end
 
   def generate_template
@@ -36,7 +42,7 @@ class Arduino
   end
 
   def link
-    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o #{project_path}.elf #{project_path}.o #{shared_cores_path}/*.o 2>>#{log_file}`
+    `avr-gcc -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=#{mmcu} -o #{project_path}.elf #{project_path}.o #{shared_cores_path}/*.o 2>>#{log_file}`
   end
 
   def hex
@@ -44,7 +50,7 @@ class Arduino
   end
 
   def upload
-    `avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:#{project_path}.hex 2>>#{log_file}`
+    `avrdude -F -V -c arduino -p #{mmcu.upcase} -P /dev/ttyACM0 -b 115200 -U flash:w:#{project_path}.hex 2>>#{log_file}`
   end
 
   private
@@ -62,7 +68,7 @@ class Arduino
   end
 
   def cflags
-    "-c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10813 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR -I#{core_path} -I#{variants_path}"
+    "-c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=#{mmcu} -DF_CPU=16000000L -DARDUINO=10813 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR -I#{core_path} -I#{variants_path}"
   end
 
   def template_path
@@ -78,10 +84,15 @@ class Arduino
   end
 
   def variants_path
-    Rails.root.join("vendor", "arduino", "variants", "standard")
+    base = Rails.root.join("vendor", "arduino", "variants")
+    @board_type == "uno" ? base.join("standard") : base.join("mega")
   end
 
   def log_file
     Rails.root.join("log", "arduino.log")
+  end
+
+  def mmcu
+    @board_type == "uno" ? "atmega328p" : "atmega2560"
   end
 end
