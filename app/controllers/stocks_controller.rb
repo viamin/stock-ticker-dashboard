@@ -1,11 +1,20 @@
 class StocksController < ApplicationController
   def index
     @stocks = Stock.active.with_prices
+
+    if params[:sort].present?
+      @stocks = sort_stocks(params[:sort], params[:direction])
+    end
   end
 
   def show
     @stocks = Stock.active
-    @stock = @stocks.find { |s| s.ticker == params[:id] } || @stocks.sample
+    @stock = if params[:id].present?
+      @stocks.friendly.find(params[:id])
+    else
+      @stocks.sample
+    end
+
     @chart_data = @stock.prices.weekly.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
     chart_values = @chart_data.values
     padding = (chart_values.max - chart_values.min) * 0.1
@@ -36,5 +45,25 @@ class StocksController < ApplicationController
   def next_stock(current_stock)
     index = @stocks.index(current_stock)
     index && index < @stocks.size - 1 ? @stocks[index + 1] : @stocks.first
+  end
+
+  def sort_stocks(column, direction)
+    direction = direction == "desc" ? "desc" : "asc"
+
+    case column
+    when "ticker", "name"
+      # Database columns can use ActiveRecord sorting
+      if direction == "desc"
+        @stocks.order(column.to_sym => direction.to_sym)
+      else
+        @stocks.order(column.to_sym)
+      end
+    when "latest_price"
+      # Manual sort for calculated latest_price
+      sorted = @stocks.sort_by { |stock| stock.latest_price.cents }
+      direction == "desc" ? sorted.reverse : sorted
+    else
+      @stocks
+    end
   end
 end
