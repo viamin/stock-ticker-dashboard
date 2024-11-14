@@ -24,3 +24,4 @@
 #
 # m    h  dom mon dow   command
   */10 *  *   *   *     cd /var/www/nyte_ticker/current && /var/www/nyte_ticker/current/bin/bundle exec rake racc:scrape RAILS_ENV=production >> /var/www/nyte_ticker/shared/log/cron.log 2>&1
+  6    *  *   *   *     cd /var/www/nyte_ticker/current && /var/www/nyte_ticker/current/bin/bundle exec rake arduino:update_ticker RAILS_ENV=production >> /var/www/nyte_ticker/shared/log/cron.log 2>&1
