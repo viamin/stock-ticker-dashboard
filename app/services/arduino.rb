@@ -68,7 +68,8 @@ class Arduino
   end
 
   def cflags
-    "-c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=#{mmcu} -DF_CPU=16000000L -DARDUINO=10813 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR -I#{core_path} -I#{variants_path}"
+    board_define = @board_type == "uno" ? "ARDUINO_AVR_UNO" : "ARDUINO_AVR_MEGA2560"
+    "-c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=#{mmcu} -DF_CPU=16000000L -DARDUINO=10813 -D#{board_define} -DARDUINO_ARCH_AVR -I#{core_path} -I#{variants_path} -I#{hardware_path}"
   end
 
   def template_path
@@ -94,5 +95,9 @@ class Arduino
 
   def mmcu
     @board_type == "uno" ? "atmega328p" : "atmega2560"
+  end
+
+  def hardware_path
+    Rails.root.join("vendor", "arduino", "hardware", "arduino", "avr")
   end
 end
