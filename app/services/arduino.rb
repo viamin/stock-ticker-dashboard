@@ -50,7 +50,8 @@ class Arduino
   end
 
   def upload
-    `avrdude -F -V -c arduino -p #{mmcu.upcase} -P /dev/ttyACM0 -b 115200 -U flash:w:#{project_path}.hex 2>>#{log_file}`
+    baud_rate = @board_type == "uno" ? "115200" : "57600"  # Try 57600 for Mega
+  "avrdude -v -p#{mcu} -c#{programmer} -P#{port} -b#{baud_rate} -D -Uflash:w:#{hex_path}:i"
   end
 
   private

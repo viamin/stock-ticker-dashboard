@@ -22,6 +22,8 @@ class Price < ApplicationRecord
 
   default_scope { order(date: :desc) }
 
+  scope :latest, -> { order(date: :desc).limit(1) }
+  scope :past_3_days, -> { where(date: 3.days.ago..) }
   scope :weekly, -> { where(date: 7.days.ago..) }
 
   def dollars
@@ -29,6 +31,7 @@ class Price < ApplicationRecord
   end
 
   def to_s
-    "$#{dollars}"
+    # "$#{dollars}"
+    ActiveSupport::NumberHelper.number_to_currency(dollars)
   end
 end

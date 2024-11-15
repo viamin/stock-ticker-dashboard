@@ -15,10 +15,13 @@
 #
 class Manipulation < ApplicationRecord
   validates :category, presence: true
-  validates :newvalue, numericality: { greater_than: 0 }
+  validates :newvalue, numericality: { greater_than: 0, only_integer: true }
   validates :message, length: { maximum: 29 }, format: { allow_blank: true, with: /\A[[:ascii:]]+\z/, message: "only allows ASCII characters" }
   validates :action, inclusion: { in: [ "add", "subtract" ] }
   # validates :value_type, inclusion: { in: [ "literal", "percent" ] }
+  validates_with PositivePriceManipulationValidator
+  validates_with RecentCategoryManipulationValidator
+
 
   def to_json
     {

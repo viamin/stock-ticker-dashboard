@@ -1,6 +1,6 @@
 class StocksController < ApplicationController
   def index
-    @stocks = Stock.active.with_prices
+    @stocks = Stock.active
 
     if params[:sort].present?
       @stocks = sort_stocks(params[:sort], params[:direction])
@@ -15,7 +15,7 @@ class StocksController < ApplicationController
       @stocks.sample
     end
 
-    @chart_data = @stock.prices.weekly.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
+    @chart_data = @stock.prices.past_3_days.group_by_hour(:date).average(:cents).compact.transform_values { |v| v / 100.0 }
     chart_values = @chart_data.values
     padding = (chart_values.max - chart_values.min) * 0.1
     @chart_min = (chart_values.min - padding).floor
@@ -51,14 +51,13 @@ class StocksController < ApplicationController
     direction = direction == "desc" ? "desc" : "asc"
 
     case column
-    when "ticker", "name"
+    when "ticker", "name", "category"
       # Database columns can use ActiveRecord sorting
       Stock.active.with_prices.order(column => direction)
     when "latest_price"
       # Join with prices table and sort by the most recent price
       Stock.active
-           .with_prices
-           .joins("LEFT JOIN prices ON prices.stock_id = stocks.id")
+           .joins(:prices)
            .where("prices.date = (SELECT MAX(date) FROM prices WHERE stock_id = stocks.id)")
            .order("prices.cents #{direction}")
     else

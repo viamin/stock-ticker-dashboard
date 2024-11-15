@@ -16,7 +16,7 @@ class ManipulationsController < ApplicationController
       TickerUploadJob.perform_later(@manipulation.id)
       # Arduino.new(insider_text: @manipulation.message, manipulation: true).update!
       # RaccCity.new.manipulate(@manipulation)
-      TickerUploadJob.perform_in(3.minutes) # leave off manipulation to only have ticker text (no manipulations)
+      TickerUploadJob.set(wait: 3.minutes).perform_later # leave off manipulation to only have ticker text (no manipulations)
       redirect_to root_path
     else
       render :new
